@@ -1,0 +1,17 @@
+server:
+  port: 9092
+  tomcat:
+    max-connections: 5000
+    max-threads: 4
+spring:
+  application:
+    name: nacos
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.211.55.25:8848
+      config:
+        server-addr: 10.211.55.25:8848
+        file-extension: properties
+  profiles:
+    active: dev
