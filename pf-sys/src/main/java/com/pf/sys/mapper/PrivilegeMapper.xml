@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.moqu.manage.dao.PrivilegeDao" >
-	<resultMap id="BaseResultMap" type="com.moqu.manage.entity.Privilege">
+<mapper namespace="com.pf.sys.dao.PrivilegeDao" >
+	<resultMap id="BaseResultMap" type="com.pf.sys.entity.Privilege">
 		<result column="id" property="id" jdbcType="VARCHAR"/>
-		<result column="name" property="name" jdbcType="VARCHAR"/>
-		<result column="type" property="type" jdbcType="INTEGER"/>
-		<result column="url" property="url" jdbcType="VARCHAR"/>
 		<result column="pid" property="pid" jdbcType="VARCHAR"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="title" property="title" jdbcType="INTEGER"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
 		<result column="icon" property="icon" jdbcType="VARCHAR"/>
+		<result column="controller" property="controller" jdbcType="VARCHAR"/>
+		<result column="files" property="files" jdbcType="VARCHAR"/>
+		<result column="turl" property="turl" jdbcType="VARCHAR"/>
+		<result column="sn" property="sn" jdbcType="INTEGER"/>
 	</resultMap>
 	
 	<resultMap id="TreeResultMap" type="java.util.Map">
@@ -15,27 +19,96 @@
 		<result column="name" property="text" jdbcType="VARCHAR"/>
 		<result column="pid" property="parent" jdbcType="VARCHAR"/>
 	</resultMap>
+
+	<sql id="Base_Column_List">
+		t.id,t.name,t.title,t.url,t.controller,t.pid,t.icon,t.sn,t.files,t.turl
+	</sql>
 	
 	<select id="selectAll" resultMap="BaseResultMap">
-		select id, name, type, url, pid from t_privilege order by displayorder asc
+		select id, name, title, url, pid from t_privilege order by sn asc
 	</select>
 	
 	<select id="selectTree" resultMap="TreeResultMap">
-		select id, name, pid from t_privilege order by displayorder asc
+		select id, title name, pid from t_privilege order by sn asc
 	</select>
 	
 	<select id="selectByRole" resultMap="TreeResultMap">
 		select p.id, p.name, p.pid from t_privilege p,t_role_privilege rp
-		where p.id=rp.privilegeid and roleid=#{value} order by displayorder asc
+		where p.id=rp.privilegeid and roleid=#{value} order by sn asc
 	</select>
 	
 	<select id="getMenusByUser" resultMap="BaseResultMap">
-		select distinct p.id,p.name,p.url,p.pid,p.icon from t_manager_role a inner join t_role_privilege b
-		on a.roleid=b.roleid
-		inner join t_privilege_rela r on b.privilegeid=r.sid
-		inner join t_privilege p on r.pid=p.id
-		where managerid=#{value}
-		order by displayorder
+		select p.id,p.name,p.title,p.url,p.pid,p.icon,p.type,p.controller,p.files,p.turl,p.sn
+		from t_manager_role m
+		inner join t_role_privilege r on m.roleid=r.roleid
+		inner join t_privilege p on r.privilegeid=p.id
+		where m.managerid=#{value}
+		order by p.pid,p.sn
 	</select>
+
+
+	<select id="findBy" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_privilege t
+	</select>
+
+	<select id="findById" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_privilege t
+		where id=#{value}
+	</select>
+
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1)
+		from t_privilege t
+	</select>
+
+	<insert id="addEntity">
+		insert into t_privilege
+		(id,pid,name,title,url,controller,sn,icon,files,turl)
+		values
+		(#{id},#{pid},#{name},#{title},#{url},#{controller},#{sn},#{icon,jdbcType=VARCHAR},#{files,jdbcType=VARCHAR},#{turl,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateEntity">
+		update t_privilege
+		<trim prefix="set" prefixOverrides="," >
+			<if test="name != null and name != ''" >
+				,name = #{name}
+			</if>
+			<if test="title != null and title != ''" >
+				,title = #{title}
+			</if>
+			<if test="url != null and url != ''" >
+				,url = #{url}
+			</if>
+			<if test="controller != null and controller != ''" >
+				,controller = #{controller}
+			</if>
+			<if test="sn != null" >
+				,sn = #{sn}
+			</if>
+			<if test="icon != null and icon != ''" >
+				,icon = #{icon}
+			</if>
+			<if test="files != null and files != ''" >
+				,files = #{files}
+			</if>
+			<if test="pid != null and pid != ''" >
+				,pid = #{pid}
+			</if>
+			<if test="turl != null and turl != ''" >
+				,turl = #{turl}
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<delete id="deleteById">
+		delete from t_privilege where id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
 </mapper>
 

@@ -5,15 +5,17 @@
     <table class="table table-actions table-striped">
         <thead>
         <tr class="bg-dark-blue">
+            <th width="100">序号</th>
             <th>角色名称</th>
-            <th>创建时间</th>
+            <th width="200">创建时间</th>
             <th width="120">操作</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="e in page.list">
+            <td>{{$index + 1}}</td>
             <td>{{e.rolename}}</td>
-            <td>{{e.createtime}}</td>
+            <td>{{e.ctime}}</td>
             <td>
                 <button class="btn btn-xs btn-primary" ng-click="editEntity(e,$index)"><i class="fa fa-edit"></i>编辑</button>
                 <button class="btn btn-xs btn-danger" ng-click="delEntity(e,$index)"><i class="fa fa-trash-o"></i>删除</button>
@@ -47,19 +49,17 @@
                     <div class="modal-body ">
                         <div class="form-horizontal form-group-separated no-margin form-border">
                             <div class="form-group">
-                                <label class="col-md-2 control-label">角色名称：</label>
-                                <div class="col-md-10">
+                                <label class="col-md-3 control-label">角色名称：</label>
+                                <div class="col-md-9">
                                     <input class="form-control" type="text" name="rolename"
                                            ng-model="entity.rolename"
                                     required >
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">创建时间：</label>
-                                <div class="col-md-10">
-                                    <input class="form-control" type="text" name="createtime"
-                                           ng-model="entity.createtime"
-                                    required >
+                                <label class="col-md-3 control-label">权限：</label>
+                                <div class="col-md-9">
+                                    <div id="priv_tree"></div>
                                 </div>
                             </div>
                         </div>

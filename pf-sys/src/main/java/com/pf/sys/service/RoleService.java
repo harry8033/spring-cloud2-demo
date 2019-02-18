@@ -1,11 +1,13 @@
-package com.moqu.manage.service;
+package com.pf.sys.service;
 
-import com.dindon.core.utils.Common;
-import com.dindon.core.utils.Page;
-import com.moqu.manage.dao.PrivilegeDao;
-import com.moqu.manage.dao.RoleDao;
-import com.moqu.manage.entity.Role;
-import com.moqu.manage.entity.RolePrivilegeRela;
+import com.pf.core.util.Common;
+import com.pf.core.util.Constants;
+import com.pf.sys.aspectj.annotation.ModuleLog;
+import com.pf.sys.aspectj.enums.OptType;
+import com.pf.sys.dao.PrivilegeDao;
+import com.pf.sys.dao.RoleDao;
+import com.pf.sys.entity.Role;
+import com.pf.sys.entity.RolePrivilegeRela;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,17 +36,10 @@ public class RoleService{
         return roleDao.findById(id);
     }
 	
-	/**分页查询*/
-	public Page<Role> findByPage(Map<String, Object> params) {
-    	Page<Role> page = new Page<Role>(params);
-		page.setRows(roleDao.findBy(params));
-		page.setTotal(roleDao.getCount(params));
-        return page;
-    }
-	
 	/**
 	 * 新增
 	 */
+	@ModuleLog(module = "角色管理", type = OptType.SAVE)
 	public void addEntity(Role role){
 		role.setId(Common.getUUID());
 		roleDao.addEntity(role);
@@ -54,21 +49,22 @@ public class RoleService{
 	/**
 	 * 修改
 	 */
+	@ModuleLog(module = "角色管理", type = OptType.EDIT)
 	public void updateEntity(Role role){
 		roleDao.updateEntity(role);
 		updateRolePrivRela(role);
 	}
 	
 	private void updateRolePrivRela(Role role){
-		Map<String, Object> params = new HashMap<>();
+		Map<String, Object> params = new HashMap<>(2);
 		params.put("roleid", role.getId());
 		if(!Common.isEmpty(role.getPrivileges())){
 			List<RolePrivilegeRela> list = new ArrayList<>();
-			for(String id : role.getPrivileges().split(",")){
-				RolePrivilegeRela dp = new RolePrivilegeRela();
-				dp.setRoleid(role.getId());
-				dp.setPrivilegeid(id);
-				list.add(dp);
+			for(String id : role.getPrivileges().split(Constants.SYMBOL_DH)){
+				RolePrivilegeRela rp = new RolePrivilegeRela();
+				rp.setRoleid(role.getId());
+				rp.setPrivilegeid(id);
+				list.add(rp);
 			}
 			params.put("list", list);
 		}
@@ -78,13 +74,9 @@ public class RoleService{
 	/**
 	 * 删除
 	 */
-	@Transactional
-	public void deleteByIds(String[] ids){
-		if(ids != null){
-			for(String id : ids){
-				roleDao.deleteById(id);
-			}
-		}
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteByIds(List<String> ids){
+		roleDao.deleteById(ids);
 	}
 	
 	/**

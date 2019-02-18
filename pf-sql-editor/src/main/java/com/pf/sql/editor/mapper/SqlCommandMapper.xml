@@ -1,97 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.pf.sys.dao.ManagerDao" >
-	<resultMap id="BaseResultMap" type="com.pf.sys.entity.Manager">
-		<result column="id" property="id" jdbcType="VARCHAR"/>
-		<result column="account" property="account" jdbcType="VARCHAR"/>
-		<result column="pwd" property="pwd" jdbcType="VARCHAR"/>
-		<result column="state" property="state" jdbcType="INTEGER"/>
-		<result column="createtime" property="createtime" jdbcType="DATE"/>
-		<result column="salt" property="salt" jdbcType="VARCHAR"/>
-		<collection column="id" property="roleList" select="com.pf.sys.dao.RoleDao.findByManagerId"/>
-	</resultMap>
-	
-	<resultMap id="ManagerMap" type="com.pf.sys.entity.Manager">
-		<result column="id" property="id" jdbcType="VARCHAR"/>
-		<result column="account" property="account" jdbcType="VARCHAR"/>
-		<result column="pwd" property="pwd" jdbcType="VARCHAR"/>
-		<result column="state" property="state" jdbcType="INTEGER"/>
-		<result column="salt" property="salt" jdbcType="VARCHAR"/>
-	</resultMap>
-	
-	<sql id="Base_Column_List">
-	t.id,t.account,t.pwd,t.state,t.createtime
-	</sql>
-	
-	<sql id="Example_Where_Clause" >
-		<trim prefix="where" prefixOverrides="and|or" >
-			<if test="id != null and id != ''" >
-	         	and t.id = #{id}
-			</if>
-			<if test="account != null and account != ''" >
-	         	and t.account = #{account}
-			</if>
-			<if test="pwd != null and pwd != ''" >
-	         	and t.pwd = #{pwd}
-			</if>
-			<if test="state != null and state != ''" >
-	         	and t.state = #{state}
-			</if>
-			<if test="createtime != null and createtime != ''" >
-	         	and t.createtime = #{createtime}
-			</if>
-		</trim>
-	</sql>
-	
-	<select id="findBy" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List"/>
-		from t_manager t 
-	    <include refid="Example_Where_Clause" />
-	    <!--<include refid="common.Pagination_Tail" />-->
+<mapper namespace="com.pf.sql.editor.dao.SqlCommandDao" >
+	<select id="queryStatement" resultType="java.util.Map">
+		${query}
+	</select>
+
+	<select id="queryCount" resultType="java.lang.Long">
+		select count(1) from ( ${query} ) tab
 	</select>
 	
-	<select id="findById" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List"/>
-		from t_manager t 
-	    where id=#{value}
-	</select>
-	
-	<select id="getCount" resultType="java.lang.Long">
-		select count(1)
-		from t_manager t 
-	    <include refid="Example_Where_Clause" />
-	</select>
-	
-	<insert id="addEntity">
-		insert into t_manager
-		(id,account,pwd,state,salt) 
-		values
-		(#{id},#{account},#{pwd},#{state},#{salt})
-	</insert>
-	
-	<update id="updateEntity">
-		update t_manager set account = #{account},state = #{state}
-		<!--<if test="pwd != null and pwd != ''" >
-	         	,pwd = #{pwd},salt=#{salt}
-		</if>-->
-		where id=#{id}
-	</update>
-	
-	<delete id="deleteById">
-		delete from t_manager where id=#{value};
-		delete from t_manager_role where managerid=#{value};
-	</delete>
-	
-	<select id="findByAccount" resultMap="ManagerMap">
-		select t.id,t.account,t.pwd,t.state,t.salt from t_manager t where t.account=#{value};
-	</select>
-	
-	<update id="updatePwd">
-		update t_manager set pwd=#{newpwd},createtime=sysdate()
-		<if test="salt != null and salt != ''">
-			,salt = #{salt}
-		</if>
-		where account=#{account}
+	<update id="updateStatement">
+		${value}
 	</update>
 </mapper>
 

@@ -1,6 +1,6 @@
-package com.moqu.manage.dao;
+package com.pf.sys.dao;
 
-import com.moqu.manage.entity.Role;
+import com.pf.sys.entity.Role;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,7 @@ public interface RoleDao {
 
     void updateEntity(Role obj);
 
-    void deleteById(String id);
+    void deleteById(List<String> ids);
 
     void updateUserRoleRela(Map<String, Object> params);
 

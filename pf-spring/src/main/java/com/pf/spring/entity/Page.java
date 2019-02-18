@@ -1,4 +1,4 @@
-package com.dindon.core.utils;
+package com.pf.spring.entity;
 
 import java.util.List;
 import java.util.Map;
@@ -15,13 +15,13 @@ public class Page<T>{
 	private List<T> rows;
 	
 	//总条数
-	private long total = 0;
+	private long total = 0L;
 	
 	//开始位置
-	private long start = 0l;
+	private long start = 0L;
 	
 	//结束位置
-	private long end = 0l;
+	private long end = 0L;
 	
 	public int getNumber() {
 		return number;
@@ -40,8 +40,9 @@ public class Page<T>{
 	}
 
 	public int getNumberOfElements() {
-		if(rows != null)
+		if(rows != null){
 			return rows.size();
+		}
 		return 0;
 	}
 
@@ -54,8 +55,9 @@ public class Page<T>{
 	}
 
 	public boolean hasContent() {
-		if(rows != null)
+		if(rows != null){
 			return true;
+		}
 		return false;
 	}
 
@@ -109,8 +111,11 @@ public class Page<T>{
 	}
 	
 	public Page(){
-		this.number = 1;
-		this.size = 10;
+	}
+
+	public Page(int page){
+		start = (page - 1) * size;
+
 	}
 	
 	public Page(int pageNo, int pageSize){
@@ -120,18 +125,28 @@ public class Page<T>{
 	
 	public Page(Map<String, Object> params){
 		if(params != null){
-			try{
-				start = Integer.parseInt(String.valueOf(params.get("offset")));
-			}catch(NumberFormatException ne){
-				
+			/*判断参数中是否包含page参数*/
+			if(params.containsKey("page")){
+				try{
+					this.number = Integer.parseInt(String.valueOf(params.get("page")));
+				}catch(NumberFormatException ne){
+
+				}
+				this.start = (this.number - 1) * this.size;
+			}else{
+				try{
+					this.start = Integer.parseInt(String.valueOf(params.get("offset")));
+				}catch(NumberFormatException ne){
+
+				}
+				try{
+					this.size = Integer.parseInt(String.valueOf(params.get("limit")));
+				}catch(NumberFormatException ne){
+
+				}
+				this.number = this.start==0 || this.size == 0 ? 0 : (int)this.start / this.size + 1;
 			}
-			try{
-				size = Integer.parseInt(String.valueOf(params.get("limit")));
-			}catch(NumberFormatException ne){
-				
-			}
-			number = start==0||size==0?0:(int)start/size + 1;
-			params.put("pageStart", start);
+			params.put("pageStart", this.start);
 			params.put("pageSize", getSize());
 			params.put("pageEnd", getEnd());
 		}

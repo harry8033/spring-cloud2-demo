@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.moqu.manage.dao.RoleDao" >
-	<resultMap id="BaseResultMap" type="com.moqu.manage.entity.Role">
+<mapper namespace="com.pf.sys.dao.RoleDao" >
+	<resultMap id="BaseResultMap" type="com.pf.sys.entity.Role">
 		<result column="id" property="id" jdbcType="VARCHAR"/>
 		<result column="rolename" property="rolename" jdbcType="VARCHAR"/>
+		<result column="ctime" property="ctime" jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	<sql id="Base_Column_List">
-	t.id,t.rolename,t.createtime
+	t.id,t.rolename,date_format(t.ctime, '%Y-%m-%d %H:%i:%s') ctime
 	</sql>
 	
 	<sql id="Example_Where_Clause" >
@@ -18,8 +19,8 @@
 			<if test="rolename != null and rolename != ''" >
 	         	and t.rolename = #{rolename}
 			</if>
-			<if test="createtime != null and createtime != ''" >
-	         	and t.createtime = #{createtime}
+			<if test="ctime != null and ctime != ''" >
+	         	and t.ctime = #{ctime}
 			</if>
 		</trim>
 	</sql>
@@ -28,7 +29,6 @@
 		select <include refid="Base_Column_List"/>
 		from t_role t 
 	    <include refid="Example_Where_Clause" />
-	    <include refid="common.Pagination_Tail" />
 	</select>
 	
 	<select id="findById" resultMap="BaseResultMap">
@@ -62,8 +62,14 @@
 	</update>
 	
 	<delete id="deleteById">
-		delete from t_role_privilege where roleid=#{value};
-		delete from t_role where id=#{value};
+		delete from t_role_privilege where roleid in
+		<foreach collection="list" item="id" open="(" separator="," close=");">
+			#{id}
+		</foreach>
+		delete from t_role where id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
 	</delete>
 	
 	<update id="updateUserRoleRela">

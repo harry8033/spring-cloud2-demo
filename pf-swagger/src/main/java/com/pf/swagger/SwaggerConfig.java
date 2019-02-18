@@ -1,4 +1,4 @@
-package com.hr.swagger;
+package com.pf.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.hr.demo.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.pf"))
                 .paths(PathSelectors.regex("/.*"))
                 .build();
     }

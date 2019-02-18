@@ -1,6 +1,6 @@
-package com.moqu.manage.entity;
+package com.pf.sys.entity;
 
-import com.dindon.core.utils.Common;
+import com.pf.core.util.Common;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.sql.Timestamp;

@@ -1,33 +1,33 @@
 <div class="padding-xs" ng-controller="OptLogController">
-    <div class="btn-custom-group">
-        <button class="btn btn-info btn-sm" ng-click="addEntity()"><i class="fa fa-plus-circle"></i> 新增</button>
-    </div>
     <table class="table table-actions table-striped">
         <thead>
         <tr class="bg-dark-blue">
             <th>模块名称</th>
-            <th>操作类型</th>
-            <th>操作人</th>
-            <th>操作状态：success、excption</th>
-            <th></th>
-            <th></th>
-            <th>操作时间</th>
-            <th width="120">操作</th>
+            <th width="100">类型</th>
+            <th width="120">操作人</th>
+            <th width="100">状态</th>
+            <th width="60">参数</th>
+            <th width="60">错误</th>
+            <th width="150">操作时间</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="e in page.list">
             <td>{{e.module}}</td>
             <td>{{e.opt}}</td>
-            <td>{{e.oper}}</td>
+            <td>{{e.operAcc}}</td>
             <td>{{e.state}}</td>
-            <td>{{e.params}}</td>
-            <td>{{e.err}}</td>
-            <td>{{e.ctime}}</td>
             <td>
-                <button class="btn btn-xs btn-primary" ng-click="editEntity(e,$index)"><i class="fa fa-edit"></i>编辑</button>
-                <button class="btn btn-xs btn-danger" ng-click="delEntity(e,$index)"><i class="fa fa-trash-o"></i>删除</button>
+                <button class="btn btn-xs" data-toggle="tooltip" title="{{e.params}}">
+                    <i class="fas fa-info"></i>
+                </button>
             </td>
+            <td>
+                <button ng-if="e.err" class="btn btn-warning btn-xs" data-toggle="tooltip" title="{{e.err}}">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </button>
+            </td>
+            <td>{{e.ctime}}</td>
         </tr>
         </tbody>
     </table>
@@ -124,4 +124,3 @@
         </div>
     </form>
 </div>
-

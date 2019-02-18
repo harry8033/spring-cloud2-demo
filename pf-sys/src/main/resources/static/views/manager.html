@@ -3,7 +3,7 @@
         <button class="btn btn-info btn-sm" ng-click="addEntity()"><i class="fa fa-plus-circle"></i> 新增</button>
     </div>
     <table class="table table-actions table-striped">
-        <thead>
+        <thead class="flip-content bordered-palegreen">
         <tr class="bg-dark-blue">
             <th width="200">帐号</th>
             <th width="100">状态</th>
@@ -13,7 +13,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="v in page.rows">
+        <tr ng-repeat="v in page.list">
             <td>{{v.account}}</td>
             <td>{{v.state | m_state}}</td>
             <td>{{v.roleList | roles}}</td>
@@ -31,7 +31,7 @@
         <ul uib-pagination
             total-items="page.total"
             ng-model="currentPage"
-            items-per-page="page.size"
+            items-per-page="page.pageSize"
             max-size="6"
             class="pagination-sm"
             boundary-link-numbers="true"

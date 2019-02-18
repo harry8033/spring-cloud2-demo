@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
  * Date: Created in 2019/2/16.
  * Description:
  */
-public class ShiroUtil {
+public class ShiroUtils {
 
     public static Subject getSubjct() {
         return SecurityUtils.getSubject();

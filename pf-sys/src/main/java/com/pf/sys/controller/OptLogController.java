@@ -27,7 +27,7 @@ public class OptLogController extends BaseController{
 	
 	/**
 	 * 功能描述: 分页查询数据
-	 * @param p 页码
+	 * @param params 参数
 	 * @return 分页数据
 	 * @date yyyy/mm/dd
 	 */
@@ -50,7 +50,6 @@ public class OptLogController extends BaseController{
 		if(!Common.isEmpty(entity.getId())){
 			optLogService.updateEntity(entity);
 		}else{
-			entity.setId(Common.getUUID());
 			optLogService.addEntity(entity);
 		}
 		return Result.asSuccess();

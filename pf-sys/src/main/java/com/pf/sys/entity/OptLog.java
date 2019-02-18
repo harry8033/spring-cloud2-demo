@@ -17,8 +17,14 @@ public class OptLog {
 	private String opt;
 	/*操作人*/
 	private String oper;
+	/*操作人帐号*/
+	private String operAcc;
 	/*操作状态：success、excption*/
 	private String state;
+	/**/
+	private String params;
+	/**/
+	private String err;
 	private String ctime;
 
 
@@ -58,6 +64,20 @@ public class OptLog {
 	public void setState(String state) {
 		this.state = state;
 	}
+	public String getParams() {
+		return this.params;
+	}
+	
+	public void setParams(String params) {
+		this.params = params;
+	}
+	public String getErr() {
+		return this.err;
+	}
+	
+	public void setErr(String err) {
+		this.err = err;
+	}
 	public String getCtime() {
 		return ctime;
 	}
@@ -65,6 +85,13 @@ public class OptLog {
 	public void setCtime(String ctime) {
 		this.ctime = ctime;
 	}
-	
+
+	public String getOperAcc() {
+		return operAcc;
+	}
+
+	public void setOperAcc(String operAcc) {
+		this.operAcc = operAcc;
+	}
 }
 

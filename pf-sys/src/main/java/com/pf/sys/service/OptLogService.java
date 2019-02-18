@@ -1,14 +1,13 @@
 package com.pf.sys.service;
 
-import java.util.List;
-
+import com.pf.core.entity.Param;
+import com.pf.sys.dao.OptLogDao;
+import com.pf.sys.entity.OptLog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.pf.core.entity.Param;
-import com.pf.sys.entity.OptLog;
-import com.pf.sys.dao.OptLogDao;
+import java.util.List;
 
 /**
  * Author: 作者
@@ -66,6 +65,6 @@ public class OptLogService{
 	 */
 	@Transactional
 	public void deleteByIds(List<String> ids){
-		optLogDao.deleteById(id);
+		optLogDao.deleteById(ids);
 	}
 }

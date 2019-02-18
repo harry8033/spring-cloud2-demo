@@ -16,7 +16,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="e in page.rows">
+        <tr ng-repeat="e in page.list">
             <td><i class="{{e.icon}}"></i></td>
             <td>{{e.id}}</td>
             <td>{{e.name}}</td>
@@ -36,7 +36,7 @@
         <ul uib-pagination
             total-items="page.total"
             ng-model="currentPage"
-            items-per-page="page.size"
+            items-per-page="page.pageSize"
             max-size="6"
             class="pagination-sm"
             boundary-link-numbers="true"

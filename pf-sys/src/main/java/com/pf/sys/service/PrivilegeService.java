@@ -1,63 +1,49 @@
 package com.pf.sys.service;
 
-import java.util.Map;
-import java.util.List;
-
+import com.pf.core.entity.Param;
+import com.pf.sys.dao.PrivilegeDao;
+import com.pf.sys.entity.Privilege;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dindon.core.utils.Page;
-import com.pf.sys.entity.Tprivilege;
-import com.pf.sys.dao.TprivilegeDao;
+import java.util.List;
 
 @Service
-public class TprivilegeService{
+public class PrivilegeService {
 
 	@Autowired
-	private TprivilegeDao tprivilegeDao;
+	private PrivilegeDao privilegeDao;
 	
 	/**条件查询*/
-	public List<Tprivilege> findBy(Map<String, Object> params) {
-        return tprivilegeDao.findBy(params);
+	public List<Privilege> findBy(Param params) {
+        return privilegeDao.findBy(params);
     }
 	
 	/**根据主键查询*/
-	public Tprivilege findById(String id) {
-        return tprivilegeDao.findById(id);
-    }
-	
-	/**分页查询*/
-	public Page<Tprivilege> findByPage(Map<String, Object> params) {
-    	Page<Tprivilege> page = new Page<Tprivilege>(params);
-		page.setRows(tprivilegeDao.findBy(params));
-		page.setTotal(tprivilegeDao.getCount(params));
-        return page;
+	public Privilege findById(String id) {
+        return privilegeDao.findById(id);
     }
 	
 	/**
 	 * 新增
 	 */
-	public void addEntity(Tprivilege tprivilege){
-		tprivilegeDao.addEntity(tprivilege);
+	public void addEntity(Privilege tprivilege){
+		privilegeDao.addEntity(tprivilege);
 	}
 	
 	/**
 	 * 修改
 	 */
-	public void updateEntity(Tprivilege tprivilege){
-		tprivilegeDao.updateEntity(tprivilege);
+	public void updateEntity(Privilege tprivilege){
+		privilegeDao.updateEntity(tprivilege);
 	}
 	
 	/**
 	 * 删除
 	 */
-	@Transactional
-	public void deleteByIds(String[] ids){
-		if(ids != null){
-			for(String id : ids){
-				tprivilegeDao.deleteById(id);
-			}
-		}
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteByIds(List<String> ids){
+		privilegeDao.deleteById(ids);
 	}
 }

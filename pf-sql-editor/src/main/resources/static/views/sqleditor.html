@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<style>
+    .CodeMirror {
+        border: 1px solid #eee;
+        height: auto;
+        min-height: 140px;
+    }
+    .result-success {
+        color: #2baab1;
+    }
+    .result-error {
+        color: #d02d2d;
+    }
+</style>
+<div class="padding-xs" ng-controller="SqlEditorController">
+    <form>
+        <textarea id="code" name="code"></textarea>
+    </form>
+    <div class="row" style="margin: 3px 0 3px 0">
+        <p class="col-md-10">执行结果： <span ng-class="{true: 'result-error', false: 'result-success'}[error]" ng-bind="message"></span></p>
+        <button class=" col-md-2 btn btn-large btn-info pull-right" style="width: 100px" ng-click="action()"><i class="fas fa-search"></i>执行</button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-actions table-striped">
+            <thead>
+            <tr class="bg-dark-blue">
+                <th ng-repeat="h in headers">{{h}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="v in rows">
+                <td ng-repeat="h in headers">{{v[h]}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

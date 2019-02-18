@@ -1,9 +1,6 @@
-package com.moqu.manage.entity;
+package com.pf.sys.entity;
 
-import com.dindon.core.utils.Common;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.sql.Timestamp;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Role {
@@ -12,7 +9,7 @@ public class Role {
 	//columns START
 	private String id;    //主键
 	private String rolename;    //角色名称
-	private Timestamp createtime;    //创建时间
+	private String ctime;    //创建时间
 	private String privileges;      //权限ids
 	//columns END
 
@@ -33,16 +30,12 @@ public class Role {
 		this.rolename = value;
 	}
 	
-	public String getCreatetimeString() {
-		return Common.dateToString(getCreatetime());
+	public String getCtime() {
+		return this.ctime;
 	}
 	
-	public Timestamp getCreatetime() {
-		return this.createtime;
-	}
-	
-	public void setCreatetime(Timestamp value) {
-		this.createtime = value;
+	public void setCtime(String value) {
+		this.ctime = value;
 	}
 
 	public String getPrivileges() {

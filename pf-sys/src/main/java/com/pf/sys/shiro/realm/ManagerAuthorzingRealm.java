@@ -7,8 +7,11 @@ import com.pf.sys.service.ManagerService;
 import com.pf.sys.shiro.token.ManagerToken;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.realm.Realm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
 /**
@@ -17,23 +20,37 @@ import org.apache.shiro.util.ByteSource;
  * Description: 管理员 shiro realm 类
  */
 @ShiroRealm
-public class ManagerRealm implements Realm {
+public class ManagerAuthorzingRealm extends AuthorizingRealm {
 
-    @Override
-    public String getName() {
-        return "com.pf.sys.shiro.realm.ManagerRealm";
+    public ManagerAuthorzingRealm(){
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
+        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
+        //return hashedCredentialsMatcher;
+        this.setCredentialsMatcher(hashedCredentialsMatcher);
     }
 
     @Override
-    public boolean supports(AuthenticationToken token) {
+    public boolean supports(AuthenticationToken token){
         return token instanceof ManagerToken;
     }
 
     @Override
-    public AuthenticationInfo getAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+
+        return null;
+    }
+
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         ManagerService service = SpringUtil.getBean(ManagerService.class);
         Manager user = service.findByAccount((String) authenticationToken.getPrincipal());
         if (user != null){
+
+            if (user.getState() == 0) {
+                throw new LockedAccountException(); // 帐号锁定
+            }
+
             SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(authenticationToken.getPrincipal(),
                     user.getPwd(),
                     ByteSource.Util.bytes(user.getAccount() + "" + user.getSalt()),

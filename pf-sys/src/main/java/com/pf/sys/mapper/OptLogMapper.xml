@@ -6,12 +6,15 @@
 		<result column="module" property="module" jdbcType="VARCHAR"/>
 		<result column="opt" property="opt" jdbcType="VARCHAR"/>
 		<result column="oper" property="oper" jdbcType="VARCHAR"/>
+		<result column="account" property="operAcc" jdbcType="VARCHAR"/>
 		<result column="state" property="state" jdbcType="VARCHAR"/>
-		<result column="ctime" property="ctime" jdbcType="DATE"/>
+		<result column="params" property="params" jdbcType="VARCHAR"/>
+		<result column="err" property="err" jdbcType="VARCHAR"/>
+		<result column="ctime" property="ctime" jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	<sql id="Base_Column_List">
-	t.id,t.module,t.opt,t.oper,t.state,t.ctime
+	t.id,t.module,t.opt,t.oper,t.state,t.params,t.err,date_format(t.ctime,'%Y-%m-%d %H:%i:%s') ctime
 	</sql>
 	
 	<sql id="Example_Where_Clause" >
@@ -31,6 +34,12 @@
 			<if test="state != null and state != ''" >
 	         	and t.state = #{state}
 			</if>
+			<if test="params != null and params != ''" >
+	         	and t.params = #{params}
+			</if>
+			<if test="err != null and err != ''" >
+	         	and t.err = #{err}
+			</if>
 			<if test="ctime != null and ctime != ''" >
 	         	and t.ctime = #{ctime}
 			</if>
@@ -38,9 +47,10 @@
 	</sql>
 	
 	<select id="findBy" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List"/>
-		from t_module_log t 
+		select <include refid="Base_Column_List"/>,m.account
+		from t_module_log t left join t_manager m on t.oper=m.id
 	    <include refid="Example_Where_Clause" />
+		order by ctime desc
 	</select>
 	
 	<select id="findById" resultMap="BaseResultMap">
@@ -57,9 +67,9 @@
 	
 	<insert id="addEntity">
 		insert into t_module_log
-		(id,module,opt,oper,state,ctime) 
+		(id,module,opt,oper,state,params,err)
 		values
-		(#{id},#{module},#{opt},#{oper,jdbcType=VARCHAR},#{state},#{ctime,jdbcType=DATE})
+		(#{id},#{module},#{opt},#{oper,jdbcType=VARCHAR},#{state},#{params,jdbcType=VARCHAR},#{err,jdbcType=VARCHAR})
 	</insert>
 	
 	<update id="updateEntity">
@@ -76,6 +86,12 @@
 			</if>
 			<if test="state != null and state != ''" >
 	         	,state = #{state}
+			</if>
+			<if test="params != null and params != ''" >
+	         	,params = #{params}
+			</if>
+			<if test="err != null and err != ''" >
+	         	,err = #{err}
 			</if>
 			<if test="ctime != null and ctime != ''" >
 	         	,ctime = #{ctime}

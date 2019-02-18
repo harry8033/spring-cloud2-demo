@@ -1,20 +1,18 @@
-package com.dindon.core.base;
+package com.pf.spring.base;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.pf.core.util.Common;
+import com.pf.spring.exception.LessParamsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.dindon.core.exception.LessParamsException;
-import com.dindon.core.utils.Common;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseController {
 	
@@ -28,8 +26,8 @@ public class BaseController {
 		} catch (UnsupportedEncodingException e) {
 			log.error(e.getMessage(), e);
 		}
-		Map<String, Object> params = new HashMap<String, Object>();
 		Enumeration<String> names = request.getParameterNames();
+		Map<String, Object> params = new HashMap<>();
 		while (names.hasMoreElements()) {
 			String name = names.nextElement();
 			params.put(name, request.getParameter(name));
@@ -44,7 +42,7 @@ public class BaseController {
 		} catch (UnsupportedEncodingException e) {
 			log.error(e.getMessage(), e);
 		}
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		Enumeration<String> names = multipartRequest.getParameterNames();
 		while (names.hasMoreElements()) {
 			String name = names.nextElement();
@@ -56,7 +54,7 @@ public class BaseController {
 	public Map<String, String> getRequestParamsStr() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getRequest();
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, String> params = new HashMap<>();
 		Enumeration<String> names = request.getParameterNames();
 		while (names.hasMoreElements()) {
 			String name = names.nextElement();
@@ -75,8 +73,9 @@ public class BaseController {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getRequest();
 		String str = request.getParameter(key);
-		if (str != null)
+		if (str != null){
 			return str.split(",");
+		}
 		return new String[] {};
 	}
 
@@ -149,7 +148,7 @@ public class BaseController {
 		} catch (UnsupportedEncodingException e) {
 			log.error(e.getMessage(), e);
 		}
-		Map<String, String> params = new HashMap<>();
+		Map<String, String> params = new HashMap<>(6);
 		params.put("os", request.getHeader("platform-type"));
 		params.put("platformid", request.getHeader("platformid"));
 		params.put("channel", request.getHeader("channel"));

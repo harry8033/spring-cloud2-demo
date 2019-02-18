@@ -1,14 +1,20 @@
 app.controller('PrivilegeController', ['$scope', '$rootScope', '$env', '$component', 'w5cValidator',
     function ($scope, $rootScope, $env, $component, w5cValidator) {
 
+        $scope.pageSize = 10;
+
+        $scope.currentPage = 1;
+
         $scope.$on('$viewContentLoaded', function() {
             $scope.loadData()
         });
 
         $scope.loadData = function () {
-            $component.get($env.url + 'sys/privilege/findBy', function (resp) {
-                $scope.page = resp.data
-            });
+            $component.post($env.url + 'sys/privilege/findBy',
+                {page: $scope.currentPage, size: $scope.pageSize},
+                function (resp) {
+                    $scope.page = resp.data
+                });
         }
 
         $scope.addEntity = function (){
@@ -41,16 +47,17 @@ app.controller('PrivilegeController', ['$scope', '$rootScope', '$env', '$compone
                     })
                 }
             };
-
             $component.dialog('#modal_edit');
         }
 
         $scope.delEntity = function (v, $event) {
             $component.confirm(Message.DEL_CONFIRM, function () {
-                $component.post($env.url + 'sys/privilege/delete?id=' + v.id, null, function () {
-                    $component.success(Message.DEL_SUCCESS)
-                    $scope.loadData();
-                })
+                $component.post($env.url + 'sys/privilege/delete',
+                    {ids: [v.id]},
+                    function () {
+                        $component.success(Message.DEL_SUCCESS);
+                        $scope.loadData();
+                    });
             })
         }
     }

@@ -1,6 +1,10 @@
 app.controller('ManagerController', ['$scope', '$rootScope', '$env', '$component', 'w5cValidator',
     function ($scope, $rootScope, $env, $component, w5cValidator) {
 
+        $scope.pageSize = 10;
+
+        $scope.currentPage = 1;
+
         $scope.$on('$viewContentLoaded', function() {
             console.debug('info', '进入管理员管理页面')
             $scope.loadData()
@@ -8,14 +12,16 @@ app.controller('ManagerController', ['$scope', '$rootScope', '$env', '$component
         });
 
         $scope.loadData = function () {
-            $component.get($env.url + 'mgr/manager/findBy', function (resp) {
+            $component.post($env.url + 'sys/manager/findBy',
+                {page: $scope.currentPage, size: $scope.pageSize},
+                function (resp) {
                     $scope.page = resp.data
                 });
         }
 
         $scope.loadRoles = function () {
             $scope.roles = [];
-            $component.get($env.url + 'mgr/role/findBy', function (resp) {
+            $component.get($env.url + 'sys/role/findBy', function (resp) {
                 angular.forEach(resp.data, function(data){
                     $scope.roles.push({id:data.id, text:data.rolename});
                 })
@@ -62,14 +68,15 @@ app.controller('ManagerController', ['$scope', '$rootScope', '$env', '$component
                 })
                 $scope.roleField.val(selectedRoles).trigger('change');
             }
-            //$scope.roleField.select2('val',data.role)
 
             $component.dialog('#modal_edit');
         }
 
         $scope.delEntity = function (v, $event) {
             $component.confirm(Message.DEL_CONFIRM, function () {
-                $component.post($env.url + 'mgr/manager/deleteEntity?id=' + v.id, null, function () {
+                $component.post($env.url + 'sys/manager/deleteEntity',
+                    {ids: [v.id]},
+                    function () {
                         $component.success(Message.DEL_SUCCESS)
                         $scope.loadData();
                     })
@@ -84,7 +91,7 @@ app.controller('ManagerController', ['$scope', '$rootScope', '$env', '$component
             })
             $scope.entity.roles = tempRoles.join(',');
             $scope.entity.state = $scope.entity.status ? 1:0;
-            $component.post($env.url + 'mgr/manager/saveEntity', $scope.entity, function(response){
+            $component.post($env.url + 'sys/manager/saveEntity', $scope.entity, function(response){
                     $scope.loadData();
                     $component.closeDialog('#modal_edit');
                     $component.success(Message.SAVE_SUCCESS)
@@ -93,7 +100,7 @@ app.controller('ManagerController', ['$scope', '$rootScope', '$env', '$component
 
         $scope.reset = function (v) {
             $component.confirm(Message.RESET_PWD_CONFIRM, function () {
-                $component.post($env.url + 'mgr/manager/reset', {id: v.id, account: v.account}, function () {
+                $component.post($env.url + 'sys/manager/reset', {id: v.id, account: v.account}, function () {
                     $component.success(Message.RESET_PWD_SUCCESS)
                     $scope.loadData();
                 })

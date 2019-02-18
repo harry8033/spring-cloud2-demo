@@ -1,17 +1,21 @@
-package com.moqu.manage.service;
+package com.pf.sys.service;
 
-import com.dindon.core.utils.Common;
-import com.dindon.core.utils.MD5Utils;
-import com.dindon.core.utils.Page;
-import com.moqu.manage.dao.ManagerDao;
-import com.moqu.manage.dao.PrivilegeDao;
-import com.moqu.manage.dao.RoleDao;
-import com.moqu.manage.entity.Manager;
-import com.moqu.manage.entity.ManagerRoleRela;
-import com.moqu.manage.entity.Menu;
-import com.moqu.manage.entity.Privilege;
-import com.moqu.manage.utils.PasswordHelper;
-import org.apache.commons.beanutils.BeanUtils;
+import com.pf.core.entity.Param;
+import com.pf.core.util.Common;
+import com.pf.core.util.Constants;
+import com.pf.core.util.Md5Utils;
+import com.pf.shiro.util.PasswordHelper;
+import com.pf.spring.entity.Page;
+import com.pf.sys.aspectj.annotation.ModuleLog;
+import com.pf.sys.aspectj.enums.OptType;
+import com.pf.sys.dao.ManagerDao;
+import com.pf.sys.dao.PrivilegeDao;
+import com.pf.sys.dao.RoleDao;
+import com.pf.sys.entity.Manager;
+import com.pf.sys.entity.ManagerRoleRela;
+import com.pf.sys.entity.Menu;
+import com.pf.sys.entity.Privilege;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +47,13 @@ public class ManagerService{
         return managerDao.findById(id);
     }
 
-	/**分页查询*/
+	/**
+	 * 功能描述: 分页获取管理员信息
+	 * @auther Ru He
+	 * @param params [limit, offset] [每页行数，开始位置]
+	 * @return 返回分页数据
+	 * @date 2019/1/30 下午9:58
+	 */
 	public Page<Manager> findByPage(Map<String, Object> params) {
     	Page<Manager> page = new Page<>(params);
 		page.setRows(managerDao.findBy(params));
@@ -54,20 +64,19 @@ public class ManagerService{
 	/**
 	 * 新增
 	 */
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
+	@ModuleLog(module = "管理员管理", type = OptType.SAVE)
 	public void addEntity(Manager dmanager){
 		dmanager.setId(Common.getUUID());
-		String[] str = PasswordHelper.encryptPassword(MD5Utils.getMD5("000000".getBytes()), dmanager.getAccount());
+		String[] str = PasswordHelper.encryptPassword(Md5Utils.getMD5("000000".getBytes()), dmanager.getAccount());
 		dmanager.setPwd(str[0]);
 		dmanager.setSalt(str[1]);
 		managerDao.addEntity(dmanager);
 		updateUserRoleRela(dmanager);
 	}
 
-	/**
-	 * 修改
-	 */
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
+	@ModuleLog(module = "管理员管理", type = OptType.SAVE)
 	public void updateEntity(Manager dmanager){
 		//String[] str = PasswordHelper.encryptPassword(dmanager.getPwd(), dmanager.getAccount());
 		//dmanager.setPwd(str[0]);
@@ -78,10 +87,10 @@ public class ManagerService{
 
 	private void updateUserRoleRela(Manager dmanager){
 		if(!Common.isEmpty(dmanager.getRoles())){
-			Map<String, Object> params = new HashMap<>();
+			Map<String, Object> params = new HashMap<>(2);
 			params.put("managerid", dmanager.getId());
 			List<ManagerRoleRela> list = new ArrayList<>();
-			for(String roleid : dmanager.getRoles().split(",")){
+			for(String roleid : dmanager.getRoles().split(Constants.SYMBOL_DH)){
 				ManagerRoleRela dr = new ManagerRoleRela();
 				dr.setManagerid(dmanager.getId());
 				dr.setRoleid(roleid);
@@ -97,31 +106,29 @@ public class ManagerService{
 	/**
 	 * 删除
 	 */
-	@Transactional
-	public void deleteByIds(String[] ids){
-		if(ids != null){
-			for(String id : ids){
-				managerDao.deleteById(id);
-			}
-		}
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteByIds(List<String> ids){
+		managerDao.deleteById(ids);
 	}
 
 	/**
-	 * 根据账号获取用户信息
-	 * @param account
-	 * @return
+	 * 功能描述: 根据账号获取用户信息
+	 * @auther Ru He
+	 * @param account 帐号
+	 * @return 返回管理员信息
+	 * @date 2019/1/30 下午10:01
 	 */
 	public Manager findByAccount(String account){
 		return managerDao.findByAccount(account);
 	}
 
-	public List<Menu> getMenus(String managerId) throws Exception{
+	public List<Menu> getMenus(String managerId) {
 		List<Privilege> list = privDao.getMenusByUser(managerId);
 		List<Menu> menus = new ArrayList<>();
 		for(Privilege priv : list){
 			if("#".equals(priv.getPid())){
 				Menu menu = new Menu();
-				BeanUtils.copyProperties(menu, priv);
+				BeanUtils.copyProperties(priv, menu);
 				getSubMenus(menu, list);
 				menus.add(menu);
 			}
@@ -129,18 +136,18 @@ public class ManagerService{
 		return menus;
 	}
 
-	private void getSubMenus(Menu menu, List<Privilege> list) throws Exception{
+	private void getSubMenus(Menu menu, List<Privilege> list){
 		for(Privilege priv : list){
 			if(priv.getPid().equals(menu.getId())){
 				Menu sub = new Menu();
-				BeanUtils.copyProperties(sub, priv);
+				BeanUtils.copyProperties(priv, sub);
 				menu.getChildren().add(sub);
 				getSubMenus(sub, list);
 			}
 		}
 	}
 
-	public void updatePwd(Map<String,String> params){
+	public void updatePwd(Param params){
 		managerDao.updatePwd(params);
 	}
 }

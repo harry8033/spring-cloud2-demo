@@ -1,11 +1,13 @@
-package com.moqu.manage.entity;
+package com.pf.sys.entity;
 
 public class Privilege {
 
 	private String id;
 	
 	private String name;
-	
+
+	private String title;
+
 	private Integer type;
 	
 	private String pid;
@@ -13,6 +15,14 @@ public class Privilege {
 	private String url;
 	
 	private String icon;
+
+	private String controller;
+
+	private String files;
+
+	private String turl;
+
+	private int sn;
 
 	public String getId() {
 		return id;
@@ -60,5 +70,45 @@ public class Privilege {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	public int getSn() {
+		return sn;
+	}
+
+	public void setSn(int sn) {
+		this.sn = sn;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getController() {
+		return controller;
+	}
+
+	public void setController(String controller) {
+		this.controller = controller;
+	}
+
+	public String getFiles() {
+		return files;
+	}
+
+	public void setFiles(String files) {
+		this.files = files;
+	}
+
+	public String getTurl() {
+		return turl;
+	}
+
+	public void setTurl(String turl) {
+		this.turl = turl;
 	}
 }

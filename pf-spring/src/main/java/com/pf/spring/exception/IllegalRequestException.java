@@ -1,4 +1,4 @@
-package com.dindon.core.exception;
+package com.pf.spring.exception;
 
 public class IllegalRequestException extends RuntimeException {
 

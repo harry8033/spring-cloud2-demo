@@ -1,4 +1,4 @@
-package com.moqu.manage.entity;
+package com.pf.sys.entity;
 
 public class RolePrivilegeRela {
 

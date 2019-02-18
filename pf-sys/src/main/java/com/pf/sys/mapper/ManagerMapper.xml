@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.moqu.manage.dao.ManagerDao" >
-	<resultMap id="BaseResultMap" type="com.moqu.manage.entity.Manager">
+<mapper namespace="com.pf.sys.dao.ManagerDao" >
+	<resultMap id="BaseResultMap" type="com.pf.sys.entity.Manager">
 		<result column="id" property="id" jdbcType="VARCHAR"/>
 		<result column="account" property="account" jdbcType="VARCHAR"/>
 		<result column="pwd" property="pwd" jdbcType="VARCHAR"/>
 		<result column="state" property="state" jdbcType="INTEGER"/>
 		<result column="createtime" property="createtime" jdbcType="DATE"/>
 		<result column="salt" property="salt" jdbcType="VARCHAR"/>
-		<collection column="id" property="roleList" select="com.moqu.manage.dao.RoleDao.findByManagerId"/>
+		<collection column="id" property="roleList" select="com.pf.sys.dao.RoleDao.findByManagerId"/>
 	</resultMap>
 	
-	<resultMap id="ManagerMap" type="com.moqu.manage.entity.Manager">
+	<resultMap id="ManagerMap" type="com.pf.sys.entity.Manager">
 		<result column="id" property="id" jdbcType="VARCHAR"/>
 		<result column="account" property="account" jdbcType="VARCHAR"/>
 		<result column="pwd" property="pwd" jdbcType="VARCHAR"/>
@@ -47,7 +47,6 @@
 		select <include refid="Base_Column_List"/>
 		from t_manager t 
 	    <include refid="Example_Where_Clause" />
-	    <include refid="common.Pagination_Tail" />
 	</select>
 	
 	<select id="findById" resultMap="BaseResultMap">
@@ -71,15 +70,20 @@
 	
 	<update id="updateEntity">
 		update t_manager set account = #{account},state = #{state}
-		<!--<if test="pwd != null and pwd != ''" >
-	         	,pwd = #{pwd},salt=#{salt}
-		</if>-->
 		where id=#{id}
 	</update>
 	
 	<delete id="deleteById">
-		delete from t_manager where id=#{value};
-		delete from t_manager_role where managerid=#{value};
+		delete from t_manager where id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		;
+		delete from t_manager_role where managerid in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		;
 	</delete>
 	
 	<select id="findByAccount" resultMap="ManagerMap">
@@ -87,7 +91,11 @@
 	</select>
 	
 	<update id="updatePwd">
-		update t_manager set pwd=#{newpwd},createtime=sysdate() where account=#{account}
+		update t_manager set pwd=#{newpwd},createtime=sysdate()
+		<if test="salt != null and salt != ''">
+			,salt = #{salt}
+		</if>
+		where account=#{account}
 	</update>
 </mapper>
 

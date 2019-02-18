@@ -1,6 +1,8 @@
-package com.moqu.manage.dao;
+package com.pf.sys.dao;
 
-import com.moqu.manage.entity.Manager;
+
+import com.pf.core.entity.Param;
+import com.pf.sys.entity.Manager;
 
 import java.util.List;
 import java.util.Map;
@@ -17,10 +19,10 @@ public interface ManagerDao {
 	
 	void updateEntity(Manager obj);
 	
-	void deleteById(String id);
+	void deleteById(List<String> ids);
 	
 	Manager findByAccount(String account);
 
-	void updatePwd(Map<String, String> params);
+	void updatePwd(Param params);
 	
 }
