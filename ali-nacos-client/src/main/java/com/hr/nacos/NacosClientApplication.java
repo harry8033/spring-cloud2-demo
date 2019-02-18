@@ -1,4 +1,4 @@
-package com.hr.nacos;
+package com.pf.nacos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,12 +1,6 @@
-package com.dindon.core.utils;
+package com.pf.core.util;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
@@ -16,71 +10,39 @@ import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.collections.BeanMap;
-import org.apache.commons.lang.StringUtils;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-
 public class Common {
-	// 后台访问
-	//public static final String BACKGROUND_PATH = "WEB-INF/jsp";
-	// 前台访问
-	//public static final String WEB_PATH = "/WEB-INF/jsp/web";
-	
-	public static final String CHANGE_ITEMS = "change_item_list";
-	public static final String VIP_PRIVILEGES = "vip_privileges";
-	
 	// 默认除法运算精度
 	private static final int DEF_DIV_SCALE = 10;
 	
-	private static final String[] images = new String[]{".png", ".jpg", ".jpeg", ".bmp", ".gif", ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF"};
-	
-	public static void main(String[] args) {
-//		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-//		try {
-//			Date d = format1.parse("1988-03-29");
-//			System.out.println(Common.getAge(d));
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		Date newd = new Date(d.getTime() + 3 * 24 * 60 * 60 * 1000);
-//		System.out.println(format1.format(newd));
-		
-		System.out.println(compareDate("2017-12-12", "2017-12-11 10:12:00"));
-		
+	private static final String[] IMAGE_EXT = new String[]{".png", ".jpg", ".jpeg", ".bmp", ".gif", ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF"};
+
+	private static final Pattern NUMBER_PATTERN = Pattern.compile("[0-9]*");
+
+	private static final List<String> EXCLUDE_SQL_TYPE = new ArrayList<>();
+
+	static{
+		EXCLUDE_SQL_TYPE.add("BLOB");
+		EXCLUDE_SQL_TYPE.add("CLOB");
+		EXCLUDE_SQL_TYPE.add("DATE");
 	}
 
 	/**
-	 * String转换double
-	 * 
-	 * @param string
-	 * @return double
+	 * 判断变量是否为空
+	 *
+	 * @param s
+	 * @return
 	 */
-	public static double convertSourData(String dataStr) throws Exception {
-		if (dataStr != null && !"".equals(dataStr)) {
-			return Double.valueOf(dataStr);
+	public static boolean isEmpty(Integer s) {
+		if (null == s) {
+			return true;
+		} else {
+			return false;
 		}
-		throw new NumberFormatException("convert error!");
 	}
 
 	/**
@@ -139,7 +101,7 @@ public class Common {
 	 */
 	public static String fromDateH(long addTime) {
 		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return format1.format(new Date(new Date().getTime() + addTime));
+		return format1.format(new Date(System.currentTimeMillis() + addTime));
 	}
 
 	/**
@@ -193,32 +155,6 @@ public class Common {
 	}
 
 	/**
-	 * 返回用户的IP地址
-	 * 
-	 * @param request
-	 * @return
-	 */
-	public static String toIpAddr(HttpServletRequest request) {
-		String ip = request.getHeader("X-Forwarded-For");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_CLIENT_IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-		return ip;
-	}
-
-	/**
 	 * 传入原图名称，，获得一个以时间格式的新名称
 	 * 
 	 * @param fileName
@@ -258,7 +194,7 @@ public class Common {
 				return data;
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 
@@ -342,7 +278,6 @@ public class Common {
 				byteArrayOutputStream.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-				return null;
 			}
 		}
 
@@ -439,7 +374,7 @@ public class Common {
 	 * @version 1.0
 	 */
 	public static String trimComma(String para) {
-		if (StringUtils.isNotBlank(para)) {
+		if (isNotEmpty(para)) {
 			if (para.endsWith(",")) {
 				return para.substring(0, para.length() - 1);
 			} else {
@@ -459,9 +394,9 @@ public class Common {
 	 * @version 1.0
 	 */
 	public static <T extends Object> T flushObject(T t, Map<String, ?> params) {
-		if (params == null || t == null)
+		if (params == null || t == null) {
 			return t;
-
+		}
 		Class<?> clazz = t.getClass();
 		for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
 			try {
@@ -514,8 +449,9 @@ public class Common {
 	 * @version 1.0
 	 */
 	public static String htmltoString(String content) {
-		if (content == null)
+		if (content == null) {
 			return "";
+		}
 		String html = content;
 		html = html.replace("'", "&apos;");
 		html = html.replaceAll("&", "&amp;");
@@ -539,8 +475,9 @@ public class Common {
 	 * @version 1.0
 	 */
 	public static String stringtohtml(String content) {
-		if (content == null)
+		if (content == null) {
 			return "";
+		}
 		String html = content;
 		html = html.replace("&apos;", "'");
 		html = html.replaceAll("&amp;", "&");
@@ -560,8 +497,7 @@ public class Common {
 	 * @return
 	 */
 	public static boolean isNumeric1(String str) {
-		Pattern pattern = Pattern.compile("[0-9]*");
-		return pattern.matcher(str).matches();
+		return NUMBER_PATTERN.matcher(str).matches();
 	}
 
 	/**
@@ -571,9 +507,8 @@ public class Common {
 	 * @return
 	 */
 	public static Set<Class<?>> getClasses(String pack) {
-
 		// 第一个class类的集合
-		Set<Class<?>> classes = new LinkedHashSet<Class<?>>();
+		Set<Class<?>> classes = new LinkedHashSet<>();
 		// 是否循环迭代
 		boolean recursive = true;
 		// 获取包的名字 并进行替换
@@ -591,15 +526,12 @@ public class Common {
 				String protocol = url.getProtocol();
 				// 如果是以文件的形式保存在服务器上
 				if ("file".equals(protocol)) {
-					//System.err.println("file类型的扫描");
 					// 获取包的物理路径
 					String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
 					// 以文件的方式扫描整个包下的文件 并添加到集合中
 					findAndAddClassesInPackageByFile(packageName, filePath, recursive, classes);
 				} else if ("jar".equals(protocol)) {
-					// 如果是jar包文件
-					// 定义一个JarFile
-					//System.err.println("jar类型的扫描");
+					// 如果是jar包文件, 定义一个JarFile
 					JarFile jar;
 					try {
 						// 获取jar
@@ -634,8 +566,6 @@ public class Common {
 											// 添加到classes
 											classes.add(Class.forName(packageName + '.' + className));
 										} catch (ClassNotFoundException e) {
-											// log
-											// .error("添加用户自定义视图类错误 找不到此类的.class文件");
 											e.printStackTrace();
 										}
 									}
@@ -643,7 +573,6 @@ public class Common {
 							}
 						}
 					} catch (IOException e) {
-						// log.error("在扫描用户定义视图时从jar包获取文件出错");
 						e.printStackTrace();
 					}
 				}
@@ -651,7 +580,6 @@ public class Common {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return classes;
 	}
 
@@ -668,12 +596,12 @@ public class Common {
 		File dir = new File(packagePath);
 		// 如果不存在或者 也不是目录就直接返回
 		if (!dir.exists() || !dir.isDirectory()) {
-			// log.warn("用户定义包名 " + packageName + " 下没有任何文件");
 			return;
 		}
 		// 如果存在 就获取包下的所有文件 包括目录
 		File[] dirfiles = dir.listFiles(new FileFilter() {
 			// 自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)
+			@Override
 			public boolean accept(File file) {
 				return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
 			}
@@ -693,7 +621,6 @@ public class Common {
 					// 经过回复同学的提醒，这里用forName有一些不好，会触发static方法，没有使用classLoader的load干净
 					classes.add(Thread.currentThread().getContextClassLoader().loadClass(packageName + '.' + className));
 				} catch (ClassNotFoundException e) {
-					// log.error("添加用户自定义视图类错误 找不到此类的.class文件");
 					e.printStackTrace();
 				}
 			}
@@ -713,31 +640,6 @@ public class Common {
 	 */
 	public static String getUUID(){
 		return UUID.randomUUID().toString().replace("-", "");
-	}
-	
-	/**
-	 * 获取用户真实IP
-	 * @param request
-	 * @return
-	 */
-	public static String getIpAddr(HttpServletRequest request) {
-		String ip = request.getHeader("X-Real-IP");
-		if (null != ip && !"".equals(ip.trim())
-				&& !"unknown".equalsIgnoreCase(ip)) {
-			return ip;
-		}
-		ip = request.getHeader("X-Forwarded-For");
-		if (null != ip && !"".equals(ip.trim())
-				&& !"unknown".equalsIgnoreCase(ip)) {
-			// get first ip from proxy ip
-			int index = ip.indexOf(',');
-			if (index != -1) {
-				return ip.substring(0, index);
-			} else {
-				return ip;
-			}
-		}
-		return request.getRemoteAddr();
 	}
 	
 	/**
@@ -772,11 +674,13 @@ public class Common {
 	
 	/**
 	 * 日期转字符串
-	 * @param str
+	 * @param date
 	 * @return
 	 */
 	public static String dateToString(Date date){
-		if(date == null) return "";
+		if(date == null){
+			return "";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(date);
 	}
@@ -787,7 +691,9 @@ public class Common {
 	 * @return
 	 */
 	public static String date2String(Date date){
-		if(date==null) return "";
+		if(date==null){
+			return "";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		return sdf.format(date);
 	}
@@ -814,8 +720,8 @@ public class Common {
 	 * @return
 	 */
 	public static boolean isImage(String extName){
-		if(!StringUtils.isEmpty(extName)){
-			return Arrays.asList(images).contains(extName);
+		if(!isEmpty(extName)){
+			return Arrays.asList(IMAGE_EXT).contains(extName);
 		}
 		return false;
 	}
@@ -881,109 +787,6 @@ public class Common {
 			return "0";
 		}
 	}
-
-	/**
-	 * map 转 xml格式
-	 * @param vo
-	 * @param rootElement
-	 * @return
-	 */
-	public static String map2xmlBody(Map<String, Object> vo, String rootElement) {
-        org.dom4j.Document doc = DocumentHelper.createDocument();
-        Element body = DocumentHelper.createElement(rootElement);
-        doc.add(body);
-        __buildMap2xmlBody(body, vo);
-        return doc.asXML();
-    }
-	
-	/**
-	 * map 转 xml格式
-	 * @param body
-	 * @param vo
-	 */
-	private static void __buildMap2xmlBody(Element body, Map<String, Object> vo) {
-        if (vo != null) {
-            Iterator<String> it = vo.keySet().iterator();
-            while (it.hasNext()) {
-                String key = (String) it.next();
-                if (StringUtils.isNotEmpty(key)) {
-                    Object obj = vo.get(key);
-                    Element element = DocumentHelper.createElement(key);
-                    if (obj != null) {
-                        if (obj instanceof java.lang.String) {
-                            element.setText((String) obj);
-                        } else {
-                            if (obj instanceof java.lang.Character || obj instanceof java.lang.Boolean || obj instanceof java.lang.Number
-                                    || obj instanceof java.math.BigInteger || obj instanceof java.math.BigDecimal) {
-                                org.dom4j.Attribute attr = DocumentHelper.createAttribute(element, "type", obj.getClass().getCanonicalName());
-                                element.add(attr);
-                                element.setText(String.valueOf(obj));
-                            } else if (obj instanceof java.util.Map) {
-                                org.dom4j.Attribute attr = DocumentHelper.createAttribute(element, "type", java.util.Map.class.getCanonicalName());
-                                element.add(attr);
-                                __buildMap2xmlBody(element, (Map<String, Object>) obj);
-                            } else {
-                            }
-                        }
-                    }
-                    body.add(element);
-                }
-            }
-        }
-    }
-	
-	/**
-	 * 判断两个字符串的大小，返回小在前大在后的联结字符串
-	 * @param key1
-	 * @param key2
-	 * @return
-	 */
-	public static String generateKey(String key1, String key2){
-		if(key1.compareToIgnoreCase(key2) > 0){
-			return "match_" + key2.concat(key1);
-		}
-		return "match_" + key1.concat(key2);
-	}
-	
-	public static int getAge(Date dateOfBirth) {
-        int age = 0;
-        Calendar born = Calendar.getInstance();
-        Calendar now = Calendar.getInstance();
-        if (dateOfBirth != null) {
-            now.setTime(new Date());
-            born.setTime(dateOfBirth);
-            if (born.after(now)) {
-                throw new IllegalArgumentException("年龄不能超过当前日期");
-            }
-            age = now.get(Calendar.YEAR) - born.get(Calendar.YEAR);
-            int nowDayOfYear = now.get(Calendar.DAY_OF_YEAR);
-            int bornDayOfYear = born.get(Calendar.DAY_OF_YEAR);
-            System.out.println("nowDayOfYear:" + nowDayOfYear + " bornDayOfYear:" + bornDayOfYear);
-            if (nowDayOfYear < bornDayOfYear) {
-                age -= 1;
-            }
-        }
-        return age;
-    }
-	
-	/**
-	 * 对象转map
-	 * @param obj
-	 * @return
-	 */
-	public static Map<String, ?> objectToMap(Object obj) {  
-        if(obj == null)  
-            return null;   
-  
-        return new BeanMap(obj);  
-    }    
-
-	public static String getChannel(String channel, String os){
-		if(StringUtils.isEmpty(channel) &&!StringUtils.isEmpty(os) && "iOS".equalsIgnoreCase(os)){
-			return "iOS";
-		}
-		return channel;
-	}
 	
 	/**
 	 * 时间比较
@@ -993,7 +796,9 @@ public class Common {
 	 */
 	public static int compareDate(String date1, String date2){
 		
-		if(isEmpty(date1) || isEmpty(date2)) return -1;
+		if(isEmpty(date1) || isEmpty(date2)) {
+			return -1;
+		}
 		
 		String format = "yyyy-MM-dd HH:mm:ss";
 		
@@ -1018,28 +823,12 @@ public class Common {
         }
         return -1;
 	}
-	
-	public static String calcDiffTimeDesc(int minuteDiff){
-		
-		String diffTimeDesc = null;
-		
-		if(minuteDiff < 1){
-			diffTimeDesc = "刚刚";
-		}else if(minuteDiff/60 >= 24*30){
-			diffTimeDesc = minuteDiff/(60*24*30) + "个月前";
-		}else if(minuteDiff/60 >= 24*2){
-			diffTimeDesc = minuteDiff/(60*24) + "天前";
-		}else if(minuteDiff/60 >= 24){
-			diffTimeDesc = "昨天";
-		}else if(minuteDiff/60 >= 1){
-			diffTimeDesc = minuteDiff/60 + "小时前";
-		}else if(minuteDiff >=1){
-			diffTimeDesc = minuteDiff + "分钟前";
-		}else{
-			diffTimeDesc = "";
-		}
 
-		return diffTimeDesc;
+	public static boolean sqlTypeExclude(String type){
+		if(type == null){
+			return false;
+		}
+		return EXCLUDE_SQL_TYPE.contains(type.toUpperCase());
 	}
 
 }

@@ -1,11 +1,11 @@
-package com.murp.university.generator.entity;
+package com.pf.code.entity;
 
 
-import com.murp.university.generator.utils.DatabaseDataTypesUtils;
-import com.murp.university.generator.utils.StringHelper;
-
+import com.pf.code.util.DatabaseDataTypesUtils;
+import com.pf.code.util.StringHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 /**
  * 
  * @author badqiu
@@ -15,7 +15,7 @@ public class Column {
 	/**
 	 * Reference to the containing table
 	 */
-	private final Table _table;
+	//private final Table _table;
 
 	/**
 	 * The java.sql.Types type
@@ -130,7 +130,6 @@ public class Column {
 			String sqlName, int size, int decimalDigits, boolean isPk,
 			boolean isNullable, boolean isIndexed, boolean isUnique,
 			String defaultValue, String description) {
-		_table = table;
 		_sqlType = sqlType;
 		_sqlName = sqlName;
 		_sqlTypeName = sqlTypeName;
@@ -154,15 +153,6 @@ public class Column {
 	 */
 	public int getSqlType() {
 		return _sqlType;
-	}
-
-	/**
-	 * Gets the Table attribute of the DbColumn object
-	 * 
-	 * @return The Table value
-	 */
-	public Table getTable() {
-		return _table;
 	}
 
 	/**
@@ -263,7 +253,7 @@ public class Column {
 	 * @todo-javadoc Write javadocs for return value
 	 */
 	public int hashCode() {
-		return (getTable().getSqlName() + "#" + getSqlName()).hashCode();
+		return (getSqlName()).hashCode();
 	}
 
 	/**
@@ -300,7 +290,8 @@ public class Column {
 	 * @todo-javadoc Write javadocs for return value
 	 */
 	protected final String prefsPrefix() {
-		return "tables/" + getTable().getSqlName() + "/columns/" + getSqlName();
+		//return "tables/" + getTable().getSqlName() + "/columns/" + getSqlName();
+		return "columns/" + getSqlName();
 	}
 
 	/**
@@ -353,11 +344,7 @@ public class Column {
 	public boolean getIsDateTimeColumn() {
 		return DatabaseDataTypesUtils.isDate(getSqlType(), getSize(), getDecimalDigits());
 	}
-	
-	public boolean isHtmlHidden() {
-		return isPk() && _table.isSingleId();
-	}
-	
+
 	public String getJavaType() {
 		return DatabaseDataTypesUtils.getPreferredJavaType(getSqlType(), getSize(), getDecimalDigits());
 	}

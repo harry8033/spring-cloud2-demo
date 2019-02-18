@@ -1,4 +1,4 @@
-package com.hr.demo;
+package com.pf.demo;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -11,8 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
  * Description:
  */
 @SpringBootApplication
-@MapperScan("com.hr.demo.mapper")
-@ComponentScan("com.hr")
+@MapperScan("com.pf.**.dao")
+@ComponentScan("com.pf")
 public class DemoApplication {
 
     public static void main(String[] args) {

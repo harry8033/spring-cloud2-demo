@@ -4,10 +4,9 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-package com.murp.university.generator.entity;
+package com.pf.code.entity;
 
-import com.murp.university.generator.DbModelProvider;
-import com.murp.university.generator.utils.ListHashtable;
+import com.pf.code.util.ListHashtable;
 
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class ForeignKey {
 		secondRelation  = "";
 		Table foreignTable = null;
 		try {
-			foreignTable = (Table) DbModelProvider.getInstance().getTable(tableName);
+			//foreignTable = (Table) DbModelProvider.getInstance().getTable(tableName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,7 +159,7 @@ public class ForeignKey {
 	public Table getSqlTable() {
 		Table table = null;
 		try {
-			table = (Table) DbModelProvider.getInstance().getTable(tableName);
+			//table = (Table) DbModelProvider.getInstance().getTable(tableName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

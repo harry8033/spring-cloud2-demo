@@ -1,12 +1,19 @@
 app.controller('DataSourceController', ['$scope', '$rootScope', '$env', '$component', 'w5cValidator',
     function ($scope, $rootScope, $env, $component, w5cValidator) {
 
+        $scope.pageSize = 10;
+
+        $scope.currentPage = 1;
+
         $scope.$on('$viewContentLoaded', function() {
             $scope.loadData()
         });
 
         $scope.loadData = function () {
-            $component.get($env.url + 'code/datasource/findBy', function (resp) {
+            $component.post($env.url + 'code/datasource/findBy',{
+                page: $scope.currentPage,
+                size: $scope.pageSize
+            }, function (resp) {
                 $scope.page = resp.data
             });
         }
@@ -38,19 +45,28 @@ app.controller('DataSourceController', ['$scope', '$rootScope', '$env', '$compon
 
         $scope.delEntity = function (v, $event) {
             $component.confirm(Message.DEL_CONFIRM, function () {
-                $component.post($env.url + 'code/datasource/delete?id=' + v.id, null, function () {
-                    $component.success(Message.DEL_SUCCESS)
-                    $scope.loadData();
+                $component.post($env.url + 'code/datasource/delete',
+                    {ids: [v.id]},
+                    function () {
+                        $component.success(Message.DEL_SUCCESS)
+                        $scope.loadData();
                 })
             })
         }
 
         $scope.saveEntity = function () {
+            //console.log($scope.entity);
             $component.post($env.url + 'code/datasource/saveEntity', $scope.entity, function(response){
                 $scope.loadData();
                 $component.closeDialog('#modal_edit');
                 $component.success(Message.SAVE_SUCCESS)
             })
+        }
+        
+        $scope.viewTables = function (e) {
+            $component.get($env.url + 'code/datasource/viewTables/' + e.id, function (resp) {
+               console.log(resp);
+            });
         }
     }
 ]);

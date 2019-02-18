@@ -1,44 +1,39 @@
 package com.pf.code.service;
 
-import java.util.Map;
-import java.util.List;
-
+import com.pf.code.dao.DataSourceDao;
+import com.pf.code.entity.DataSource;
+import com.pf.core.entity.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.pf.spring.entity.Page;
-import com.pf.code.entity.DataSource;
-import com.pf.code.dao.DataSourceDao;
+import java.util.List;
 
 @Service
 public class DataSourceService{
+
+	private final Logger log = LoggerFactory.getLogger(DataSourceService.class);
 
 	@Autowired
 	private DataSourceDao dataSourceDao;
 	
 	/**条件查询*/
-	public List<DataSource> findBy(Map<String, Object> params) {
+	public List<DataSource> findBy(Param params) {
         return dataSourceDao.findBy(params);
     }
 	
 	/**根据主键查询*/
-	public DataSource findById(String id) {
+	public DataSource findById(Integer id) {
         return dataSourceDao.findById(id);
     }
-	
-	/**分页查询*/
-	public Page<DataSource> findByPage(Map<String, Object> params) {
-    	Page<DataSource> page = new Page<DataSource>(params);
-		page.setRows(dataSourceDao.findBy(params));
-		page.setTotal(dataSourceDao.getCount(params));
-        return page;
-    }
-	
+
 	/**
 	 * 新增
 	 */
 	public void addEntity(DataSource dataSource){
+		dataSource.setDriverclass(getDriverClass(dataSource.getDbtype()));
 		dataSourceDao.addEntity(dataSource);
 	}
 	
@@ -46,18 +41,24 @@ public class DataSourceService{
 	 * 修改
 	 */
 	public void updateEntity(DataSource dataSource){
+		dataSource.setDriverclass(getDriverClass(dataSource.getDbtype()));
 		dataSourceDao.updateEntity(dataSource);
 	}
 	
 	/**
 	 * 删除
 	 */
-	@Transactional
-	public void deleteByIds(String[] ids){
-		if(ids != null){
-			for(String id : ids){
-				dataSourceDao.deleteById(id);
-			}
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteByIds(List<String> ids){
+		dataSourceDao.deleteById(ids);
+	}
+
+	private String getDriverClass(String dbtype){
+		if("mysql".equalsIgnoreCase(dbtype)){
+			return "com.mysql.jdbc.Driver";
+		}else if("mysql".equalsIgnoreCase(dbtype)){
+			return "oracle.jdbc.driver.OracleDriver";
 		}
+		return "";
 	}
 }

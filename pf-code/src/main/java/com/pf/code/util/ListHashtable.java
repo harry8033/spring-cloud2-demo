@@ -2,7 +2,7 @@
  * Created on Nov 23, 2004
  *
  */
-package com.murp.university.generator.utils;
+package com.pf.code.util;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

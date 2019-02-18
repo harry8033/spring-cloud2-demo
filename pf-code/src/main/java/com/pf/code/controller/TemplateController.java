@@ -1,19 +1,21 @@
 package com.pf.code.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pf.code.entity.Template;
+import com.pf.code.service.TemplateService;
+import com.pf.core.entity.Param;
 import com.pf.core.entity.Result;
 import com.pf.core.util.Common;
-import com.pf.core.util.MD5Utils;
-import com.pf.shiro.util.PasswordHelper;
 import com.pf.spring.base.BaseController;
-import com.pf.spring.entity.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.pf.code.service.TemplateService;
-import com.pf.code.entity.Template;
-
-import java.util.Map;
-
+/**
+ * Author: Ru He
+ * Date: 2019/1/29
+ * Description: 模板管理控制器
+ */
 @RestController
 @RequestMapping("/code/template")
 public class TemplateController extends BaseController{
@@ -22,10 +24,11 @@ public class TemplateController extends BaseController{
 	private TemplateService templateService;
 	
 	/**分页查询*/
-	@RequestMapping(value = "/findBy", method = RequestMethod.GET)
-	public Result findByPage() {
-		Map<String, Object> params = getRequestParams();
-		Page<Template> page = templateService.findByPage(params);
+	@RequestMapping(value = "/findBy", method = RequestMethod.POST)
+	public Result findByPage(@RequestBody Param params) {
+        PageHelper.startPage(params.getIntValue("page"),
+                params.getIntValue("size"));
+		PageInfo<Template> page = new PageInfo<>(templateService.findBy(params));
         return new Result().setData(page);
     }
 
@@ -47,10 +50,9 @@ public class TemplateController extends BaseController{
 	 * 删除
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	public Result deleteEntity(){
-		String id = getParaValue("id");
-		templateService.deleteByIds(new String[]{id});
+	@PostMapping(value = "/delete")
+	public Result deleteEntity(@RequestBody Param params){
+		templateService.deleteByIds(params.getList("ids", String.class));
 		return Result.asSuccess();
 	}
 }

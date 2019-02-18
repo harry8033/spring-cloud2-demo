@@ -1,9 +1,10 @@
-package com.murp.university.generator.utils;
+package com.pf.code.util;
 
 
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * 
  * @author badqiu

@@ -10,6 +10,11 @@
 		<result column="dbtype" property="dbtype" jdbcType="VARCHAR"/>
 		<result column="driverclass" property="driverclass" jdbcType="VARCHAR"/>
 	</resultMap>
+
+	<resultMap id="SimpleResultMap" type="java.util.Map">
+		<result column="id" property="id" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+	</resultMap>
 	
 	<sql id="Base_Column_List">
 	t.id,t.name,t.url,t.uname,t.upass,t.dbtype,t.driverclass
@@ -45,7 +50,12 @@
 		select <include refid="Base_Column_List"/>
 		from t_datasource t 
 	    <include refid="Example_Where_Clause" />
-	    <include refid="common.Pagination_Tail" />
+	</select>
+
+	<select id="findSimpleBy" resultMap="SimpleResultMap">
+		select id, name
+		from t_datasource t
+		<include refid="Example_Where_Clause" />
 	</select>
 	
 	<select id="findById" resultMap="BaseResultMap">
@@ -93,7 +103,10 @@
 	</update>
 	
 	<delete id="deleteById">
-		delete from t_datasource where id=#{value}
+		delete from t_datasource where id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
 	</delete>
 </mapper>
 

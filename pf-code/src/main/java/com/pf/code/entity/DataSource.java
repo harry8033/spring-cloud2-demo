@@ -9,6 +9,7 @@ public class DataSource {
 	private Integer id;    //
 	private String name;    //数据源名称
 	private String url;    //连接字符串
+	private String dbname;   //数据库名称
 	private String uname;    //用户名
 	private String upass;    //密码
 	private String dbtype;    //数据源类型
@@ -65,6 +66,14 @@ public class DataSource {
 	
 	public void setDriverclass(String driverclass) {
 		this.driverclass = driverclass;
+	}
+
+	public String getDbname() {
+		return dbname;
+	}
+
+	public void setDbname(String dbname) {
+		this.dbname = dbname;
 	}
 }
 

@@ -1,0 +1,8 @@
+spring:
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org.quartz.jobStore.tablePrefix: t_qrtz_
+      org.quartz.scheduler.instanceId: AUTO
+      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate

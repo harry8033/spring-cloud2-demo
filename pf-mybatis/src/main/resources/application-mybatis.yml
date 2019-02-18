@@ -1,0 +1,5 @@
+pagehelper:
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: true
+  helper-dialect: mysql

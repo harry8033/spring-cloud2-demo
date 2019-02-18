@@ -8,17 +8,15 @@
             <th>模板名称</th>
             <th>文件名</th>
             <th>文件路径</th>
-            <th>压缩包内内容</th>
-            <th></th>
+            <th width="150">创建时间</th>
             <th width="120">操作</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="e in page.rows">
+        <tr ng-repeat="e in page.list">
             <td>{{e.name}}</td>
             <td>{{e.filename}}</td>
             <td>{{e.filepath}}</td>
-            <td>{{e.files}}</td>
             <td>{{e.ctime}}</td>
             <td>
                 <button class="btn btn-xs btn-primary" ng-click="editEntity(e,$index)"><i class="fa fa-edit"></i>编辑</button>
@@ -32,7 +30,7 @@
         <ul uib-pagination
             total-items="page.total"
             ng-model="currentPage"
-            items-per-page="page.size"
+            items-per-page="page.pageSize"
             max-size="6"
             class="pagination-sm"
             boundary-link-numbers="true"
@@ -53,42 +51,34 @@
                     <div class="modal-body ">
                         <div class="form-horizontal form-group-separated no-margin form-border">
                             <div class="form-group">
-                                <label class="col-md-2 control-label">模板名称：</label>
-                                <div class="col-md-10">
+                                <label class="col-md-3 control-label">模板名称：</label>
+                                <div class="col-md-9">
                                     <input class="form-control" type="text" name="name"
                                            ng-model="entity.name"
                                      >
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">文件名：</label>
-                                <div class="col-md-10">
+                                <label class="col-md-3 control-label">文件名：</label>
+                                <div class="col-md-9">
                                     <input class="form-control" type="text" name="filename"
                                            ng-model="entity.filename"
                                      >
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">文件路径：</label>
-                                <div class="col-md-10">
+                                <label class="col-md-3 control-label">文件路径：</label>
+                                <div class="col-md-9">
                                     <input class="form-control" type="text" name="filepath"
                                            ng-model="entity.filepath"
                                      >
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">压缩包内内容：</label>
-                                <div class="col-md-10">
+                                <label class="col-md-3 control-label">压缩包内内容：</label>
+                                <div class="col-md-9">
                                     <input class="form-control" type="text" name="files"
                                            ng-model="entity.files"
-                                     >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">：</label>
-                                <div class="col-md-10">
-                                    <input class="form-control" type="text" name="ctime"
-                                           ng-model="entity.ctime"
                                      >
                                 </div>
                             </div>

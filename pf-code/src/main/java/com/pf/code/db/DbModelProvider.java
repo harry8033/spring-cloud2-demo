@@ -1,37 +1,56 @@
-package com.murp.university.generator;
+package com.pf.code.db;
 
-import com.murp.university.generator.entity.Column;
-import com.murp.university.generator.entity.Table;
+import com.pf.code.entity.Column;
+import com.pf.code.entity.DataSource;
+import com.pf.code.entity.Table;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.sql.*;
 import java.util.*;
+
 /**
- * 
- * @author badqiu
- * @email badqiu(a)gmail.com
+ *
  */
 public class DbModelProvider {
 	/**
 	 * Logger for this class
 	 */
-	private static final Log _log = LogFactory.getLog(DbModelProvider.class);
+	private static final Log log = LogFactory.getLog(DbModelProvider.class);
 
 //	Properties props;
-	public String catalog;
-	public String schema;
+	private String catalog;
+	private String schema;
 	
 	private Connection connection;
-	private static DbModelProvider instance = new DbModelProvider();
-	
-	private DbModelProvider() {
+	//private static DbModelProvider instance = new DbModelProvider();
+
+	private DataSource dataSource;
+
+	public String getCatalog() {
+		return catalog;
+	}
+
+	public void setCatalog(String catalog) {
+		this.catalog = catalog;
+	}
+
+	public String getSchema() {
+		return schema;
+	}
+
+	public void setSchema(String schema) {
+		this.schema = schema;
+	}
+
+	public DbModelProvider(DataSource ds) {
+		this.dataSource = ds;
 		init();
 	}
 
 	private void init() {
 		
-		this.schema = PropertiesProvider.getProperty("jdbc.schema","");
+		/*this.schema = PropertiesProvider.getProperty("jdbc.schema","");
 		if("".equals(schema.trim())) {
 			this.schema = null;
 		}
@@ -40,27 +59,23 @@ public class DbModelProvider {
 			this.catalog = null;
 		}
 		
-		System.out.println("jdbc.schema="+this.schema+" jdbc.catalog="+this.catalog);
+		System.out.println("jdbc.schema="+this.schema+" jdbc.catalog="+this.catalog);*/
 		try {
-			Class.forName(PropertiesProvider.getProperty("jdbc.driver"));
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			Class.forName(dataSource.getDriverclass());
+			Properties properties = new Properties();
+			properties.setProperty("user", dataSource.getUname());
+			properties.setProperty("password", dataSource.getUpass());
+			properties.setProperty("remarks", "true");
+			properties.setProperty("useInformationSchema", "true");
+			connection = DriverManager.getConnection(dataSource.getUrl(), properties);
+		} catch (Exception e) {
+			log.error("create db connection error.", e);
 		}
 	}
-	
-	public static DbModelProvider getInstance() {
-		return instance;
-	}
-	
-	//public static 
-	
-	private Connection getConnection() throws SQLException {
+
+	private Connection getConnection() throws SQLException{
 		if(connection == null || connection.isClosed()) {
-			Properties properties = new Properties();
-			properties.setProperty("user", PropertiesProvider.getProperty("jdbc.username"));
-			properties.setProperty("password", PropertiesProvider.getProperty("jdbc.password"));
-			properties.setProperty("remarks", "true");
-			connection = DriverManager.getConnection(PropertiesProvider.getProperty("jdbc.url"), properties);
+			init();
 		}
 		return connection;
 	}
@@ -94,8 +109,10 @@ public class DbModelProvider {
 		String schemaName = rs.getString("TABLE_SCHEM") == null ? "" : rs.getString("TABLE_SCHEM");
 		String realTableName = rs.getString("TABLE_NAME");
 		String tableType = rs.getString("TABLE_TYPE");
+		String remarks = rs.getString("REMARKS");
 		
 		Table table = new Table(className);
+		table.setRemarks(remarks);
 		table.setSqlName(realTableName);
 		if ("SYNONYM".equals(tableType) && isOracleDataBase()) {
 		    table.setOwnerSynonymName(getSynonymOwner(realTableName));
@@ -110,7 +127,7 @@ public class DbModelProvider {
 	
 	public List getAllTables(Connection conn) throws SQLException {
 		DatabaseMetaData dbMetaData = conn.getMetaData();
-		ResultSet rs = dbMetaData.getTables(catalog, schema, null, null);
+		ResultSet rs = dbMetaData.getTables(catalog, dataSource.getDbname(), null, new String[]{"TABLE"});
 		List tables = new ArrayList();
 		while(rs.next()) {
 			Table table = createTable(conn, rs);
@@ -147,7 +164,7 @@ public class DbModelProvider {
 	         }
 	      } catch (SQLException e) {
 	         String databaseStructure = getDatabaseStructureInfo();
-	         _log.error(e.getMessage(), e);
+	         log.error(e.getMessage(), e);
 	         throw new RuntimeException("Exception in getting synonym owner " + databaseStructure);
 	      } finally {
 	         if (rs != null) {
@@ -183,7 +200,7 @@ public class DbModelProvider {
 	            sb.append("  ").append(schemaRs.getString("TABLE_SCHEM")).append(nl);
 	         }
 	      } catch (SQLException e2) {
-	         _log.warn("Couldn't get schemas", e2);
+	         log.warn("Couldn't get schemas", e2);
 	         sb.append("  ?? Couldn't get schemas ??").append(nl);
 	      } finally {
 	         try {
@@ -199,7 +216,7 @@ public class DbModelProvider {
 	            sb.append("  ").append(catalogRs.getString("TABLE_CAT")).append(nl);
 	         }
 	      } catch (SQLException e2) {
-	         _log.warn("Couldn't get catalogs", e2);
+	         log.warn("Couldn't get catalogs", e2);
 	         sb.append("  ?? Couldn't get catalogs ??").append(nl);
 	      } finally {
 	         try {
@@ -215,7 +232,7 @@ public class DbModelProvider {
 	}
 	
 	private void retriveTableColumns(Table table) throws SQLException {
-	      _log.debug("-------setColumns(" + table.getSqlName() + ")");
+	      log.debug("-------setColumns(" + table.getSqlName() + ")");
 
 	      List primaryKeys = getTablePrimaryKeys(table);
 	      table.setPrimaryKeyColumns(primaryKeys);
@@ -239,7 +256,7 @@ public class DbModelProvider {
 	         while (indexRs.next()) {
 	            String columnName = indexRs.getString("COLUMN_NAME");
 	            if (columnName != null) {
-	               _log.debug("index:" + columnName);
+	               log.debug("index:" + columnName);
 	               indices.add(columnName);
 	            }
 
@@ -255,7 +272,7 @@ public class DbModelProvider {
 	               }
 	               l.add(columnName);
 	               uniqueIndices.put(columnName, indexName);
-	               _log.debug("unique:" + columnName + " (" + indexName + ")");
+	               log.debug("unique:" + columnName + " (" + indexName + ")");
 	            }
 	         }
 	      } catch (Throwable t) {
@@ -276,7 +293,7 @@ public class DbModelProvider {
 
 	      // In case none of the columns were primary keys, issue a warning.
 	      if (primaryKeys.size() == 0) {
-	         _log.warn("WARNING: The JDBC driver didn't report any primary key columns in " + table.getSqlName());
+	         log.warn("WARNING: The JDBC driver didn't report any primary key columns in " + table.getSqlName());
 	      }
 	}
 
@@ -305,7 +322,7 @@ public class DbModelProvider {
 
 	         boolean isUnique = columnsInUniqueIndex != null && columnsInUniqueIndex.size() == 1;
 	         if (isUnique) {
-	            _log.debug("unique column:" + columnName);
+	            log.debug("unique column:" + columnName);
 	         }
 	         Column column = new Column(
 	               table,
@@ -349,7 +366,7 @@ public class DbModelProvider {
 	      }
 	      while (primaryKeyRs.next()) {
 	         String columnName = primaryKeyRs.getString("COLUMN_NAME");
-	         _log.debug("primary key:" + columnName);
+	         log.debug("primary key:" + columnName);
 	         primaryKeys.add(columnName);
 	      }
 	      primaryKeyRs.close();

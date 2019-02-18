@@ -1,15 +1,17 @@
 package com.pf.code.dao;
 
-import java.util.Map;
-import java.util.List;
-
 import com.pf.code.entity.DataSource;
+
+import java.util.List;
+import java.util.Map;
 
 public interface DataSourceDao{
 	
 	List<DataSource> findBy(Map<String, Object> params);
+
+	List<Map> findSimpleBy();
 	
-	DataSource findById(String id);
+	DataSource findById(Integer id);
 	
 	long getCount(Map<String, Object> params);
 	
@@ -17,6 +19,6 @@ public interface DataSourceDao{
 	
 	int updateEntity(DataSource obj);
 	
-	int deleteById(String id);
+	int deleteById(List<String> id);
 	
 }

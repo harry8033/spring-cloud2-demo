@@ -1,4 +1,4 @@
-package com.pf.sys.shiro.token;
+package com.pf.shiro.token;
 
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.RememberMeAuthenticationToken;
@@ -8,7 +8,7 @@ import org.apache.shiro.authc.RememberMeAuthenticationToken;
  * Date: Created in 2019/1/14.
  * Description:
  */
-public class ManagerToken  implements AuthenticationToken, RememberMeAuthenticationToken {
+public class ManagerToken implements AuthenticationToken, RememberMeAuthenticationToken {
 
     /**
      *
@@ -98,6 +98,7 @@ public class ManagerToken  implements AuthenticationToken, RememberMeAuthenticat
         }
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getName());

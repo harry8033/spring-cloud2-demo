@@ -1,0 +1,116 @@
+<div class="padding-xs" ng-controller="TaskController">
+    <div class="btn-custom-group">
+        <button class="btn btn-info btn-sm" ng-click="addEntity()"><i class="fa fa-plus-circle"></i> 新增</button>
+    </div>
+    <table class="table table-actions table-striped">
+        <thead>
+        <tr class="bg-dark-blue">
+            <th>任务标识</th>
+            <th>任务分组</th>
+            <th>任务描述</th>
+            <th>任务类名</th>
+            <th>表达式</th>
+            <th>状态</th>
+            <th width="220">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="e in page.list">
+            <td>{{e.jobName}}</td>
+            <td>{{e.jobGroup}}</td>
+            <td>{{e.description}}</td>
+            <td>{{e.jobClassName}}</td>
+            <td>{{e.cron}}</td>
+            <td>{{e.state | trigger_state}}</td>
+            <td>
+                <button class="btn btn-xs btn-primary" ng-click="editEntity(e,$index)"><i class="fa fa-edit"></i>编辑</button>
+                <button class="btn btn-xs btn-danger" ng-click="delEntity(e,$index)"><i class="fa fa-trash-o"></i>删除</button>
+                <button class="btn btn-xs btn-info" ng-click="play(e,$index)"><i class="fas fa-running"></i>触发</button>
+                <button ng-if="e.state != 'PAUSED'" class="btn btn-xs btn-warning" ng-click="pause(e,$index)">
+                    <i class="far fa-pause-circle"></i>暂停
+                </button>
+                <button ng-if="e.state == 'PAUSED'" class="btn btn-xs btn-success" ng-click="resume(e,$index)">
+                    <i class="far fa-play-circle"></i>恢复
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination pagination-sm pull-right push-down-20 push-up-20">
+        <ul uib-pagination
+            total-items="page.total"
+            ng-model="currentPage"
+            items-per-page="page.pageSize"
+            max-size="6"
+            class="pagination-sm"
+            boundary-link-numbers="true"
+            rotate="false"
+            ng-change="loadData()"/>
+    </div>
+    <form name="myForm" novalidate w5c-form-validate="entity">
+        <div class="modal animated fade" id="modal_edit" tabindex="-1"
+             role="dialog" aria-labelledby="smallModalHead" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                        </button>
+                        <h4 class="modal-title" id="smallModalHead">{{editForm.title}}</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="form-horizontal form-group-separated no-margin form-border">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">任务标识：</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="jobName"
+                                           ng-model="entity.jobName"
+                                           required >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">任务分组：</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="jobGroup"
+                                           ng-model="entity.jobGroup"
+                                           required >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">任务描述：</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="description"
+                                           ng-model="entity.description"
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">任务类名：</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="jobClassName"
+                                           ng-model="entity.jobClassName"
+                                    required >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">表达式：</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="cron"
+                                           ng-model="entity.cron"
+                                           required >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                w5c-form-submit="editForm.save($event)">保存</button>
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

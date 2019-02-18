@@ -1,9 +1,9 @@
 package com.pf.code.dao;
 
-import java.util.Map;
-import java.util.List;
-
 import com.pf.code.entity.Template;
+
+import java.util.List;
+import java.util.Map;
 
 public interface TemplateDao{
 	
@@ -17,6 +17,6 @@ public interface TemplateDao{
 	
 	int updateEntity(Template obj);
 	
-	int deleteById(String id);
+	int deleteById(List<String> ids);
 	
 }

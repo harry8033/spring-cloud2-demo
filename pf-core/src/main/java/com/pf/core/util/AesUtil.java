@@ -8,7 +8,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 @SuppressWarnings("restriction")
-public class AES {
+public class AesUtil {
 
 	private static Cipher cipher;
     private static final String KEY_ALGORITHM = "AES";

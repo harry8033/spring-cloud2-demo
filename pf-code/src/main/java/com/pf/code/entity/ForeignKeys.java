@@ -4,9 +4,10 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-package com.murp.university.generator.entity;
+package com.pf.code.entity;
 
-import com.murp.university.generator.utils.ListHashtable;
+
+import com.pf.code.util.ListHashtable;
 
 /**
  * @author Richard
@@ -24,7 +25,8 @@ public class ForeignKeys  {
 	 */
 	public ForeignKeys(Table aTable) {
 		super();
-		parentTable      = aTable;
+		//parentTable      = aTable;
+		parentTable = new Table();
 		associatedTables = new ListHashtable();
 	}
 	/**
