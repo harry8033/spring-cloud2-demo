@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pf.sys.dao.OptLogDao" >
+	<resultMap id="BaseResultMap" type="com.pf.sys.entity.OptLog">
+		<result column="id" property="id" jdbcType="INTEGER"/>
+		<result column="module" property="module" jdbcType="VARCHAR"/>
+		<result column="opt" property="opt" jdbcType="VARCHAR"/>
+		<result column="oper" property="oper" jdbcType="VARCHAR"/>
+		<result column="state" property="state" jdbcType="VARCHAR"/>
+		<result column="ctime" property="ctime" jdbcType="DATE"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	t.id,t.module,t.opt,t.oper,t.state,t.ctime
+	</sql>
+	
+	<sql id="Example_Where_Clause" >
+		<trim prefix="where" prefixOverrides="and|or" >
+			<if test="id != null and id != ''" >
+	         	and t.id = #{id}
+			</if>
+			<if test="module != null and module != ''" >
+	         	and t.module = #{module}
+			</if>
+			<if test="opt != null and opt != ''" >
+	         	and t.opt = #{opt}
+			</if>
+			<if test="oper != null and oper != ''" >
+	         	and t.oper = #{oper}
+			</if>
+			<if test="state != null and state != ''" >
+	         	and t.state = #{state}
+			</if>
+			<if test="ctime != null and ctime != ''" >
+	         	and t.ctime = #{ctime}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="findBy" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_module_log t 
+	    <include refid="Example_Where_Clause" />
+	</select>
+	
+	<select id="findById" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_module_log t 
+	    where id=#{value}
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1)
+		from t_module_log t 
+	    <include refid="Example_Where_Clause" />
+	</select>
+	
+	<insert id="addEntity">
+		insert into t_module_log
+		(id,module,opt,oper,state,ctime) 
+		values
+		(#{id},#{module},#{opt},#{oper,jdbcType=VARCHAR},#{state},#{ctime,jdbcType=DATE})
+	</insert>
+	
+	<update id="updateEntity">
+		update t_module_log  
+		<trim prefix="set" prefixOverrides="," >
+			<if test="module != null and module != ''" >
+	         	,module = #{module}
+			</if>
+			<if test="opt != null and opt != ''" >
+	         	,opt = #{opt}
+			</if>
+			<if test="oper != null and oper != ''" >
+	         	,oper = #{oper}
+			</if>
+			<if test="state != null and state != ''" >
+	         	,state = #{state}
+			</if>
+			<if test="ctime != null and ctime != ''" >
+	         	,ctime = #{ctime}
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from t_module_log where id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>
+

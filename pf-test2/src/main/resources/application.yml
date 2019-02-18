@@ -1,0 +1,9 @@
+spring:
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+  cache:
+    type: ehcache
+    ehcache:
+      config: classpath:/ehcache.xml

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+  	<head>
+	    <meta charset="utf-8">
+	    <title>Simplify Admin</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+
+	    <!-- Bootstrap core CSS -->
+	    <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		
+		<!-- Font Awesome -->
+		<link href="assets/css/fontawesome/font-awesome.min.css" rel="stylesheet">
+
+		<!-- Simplify -->
+		<link href="assets/css/simplify.css" rel="stylesheet">
+
+		<!-- bootbox style -->
+		<link href="assets/css/bootbox.css" rel="stylesheet">
+	
+  	</head>
+
+  	<body class="overflow-hidden" ng-controller="IndexController">
+		<div class="wrapper preload">
+			<header class="top-nav">
+				<div class="top-nav-inner">
+					<div class="nav-header">
+						<button type="button" class="navbar-toggle pull-left sidebar-toggle" id="sidebarToggleSM">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						
+						<ul class="nav-notification pull-right">
+							<li>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog fa-lg"></i></a>
+								<span class="badge badge-danger bounceIn">1</span>
+								<ul class="dropdown-menu dropdown-sm pull-right user-dropdown">
+									<li class="user-avatar">
+										<img src="assets/images/profile/profile1.jpg" alt="" class="img-circle">
+										<div class="user-content">
+											<h5 class="no-m-bottom">Jane Doe</h5>
+											<div class="m-top-xs">
+												<a href="profile.html" class="m-right-sm">Profile</a>
+												<a href="signin.html">Log out</a>
+											</div>
+										</div>
+									</li>	  
+									<li>
+										<a href="inbox.html">
+											Inbox
+											<span class="badge badge-danger bounceIn animation-delay2 pull-right">1</span>
+										</a>
+									</li>			  
+									<li>
+										<a href="#">
+											Notification
+											<span class="badge badge-purple bounceIn animation-delay3 pull-right">2</span>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="sidebarRight-toggle">
+											Message
+											<span class="badge badge-success bounceIn animation-delay4 pull-right">7</span>
+										</a>
+									</li>
+									<li class="divider"></li>
+									<li>
+										<a href="#">Setting</a>
+									</li>			  	  
+								</ul>
+							</li>
+						</ul>
+						
+						<a href="index" class="brand">
+							<i class="fa fa-jpy"></i><span class="brand-name">示例系统</span>
+						</a>
+					</div>
+					<div class="nav-container">
+						<button type="button" class="navbar-toggle pull-left sidebar-toggle" id="sidebarToggleLG">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<div class="pull-right m-right-sm">
+							<div class="user-block hidden-xs">
+								<a href="javascript:;" id="userToggle" data-toggle="dropdown">
+									<img src="assets/images/profile/profile1.jpg" alt="" class="img-circle inline-block user-profile-pic">
+									<div class="user-detail inline-block">
+										Jane Doe
+										<i class="fa fa-angle-down"></i>
+									</div>
+								</a>
+								<div class="panel border dropdown-menu user-panel">
+									<div class="panel-body paddingTB-sm">
+										<ul>
+											<li>
+												<a href="signin.html">
+													<i class="fa fa-power-off fa-lg"></i><span class="m-left-xs">安全退出</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- ./top-nav-inner -->	
+			</header>
+			<aside class="sidebar-menu fixed">
+				<div class="sidebar-inner scrollable-sidebar">
+					<div class="main-menu">
+						<ul class="accordion">
+							<li class="menu-header">
+								Main Menu
+							</li>
+							<li class="bg-palette1 active">
+								<a href="#/dashboard">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-home fa-lg"></i></span>
+										<span class="text m-left-sm">首页</span>
+									</span>
+									<span class="menu-content-hover block">
+										首页
+									</span>
+								</a>
+							</li>
+							<li class="openable bg-palette2" ng-repeat="m in menus">
+								<a href="javascript:;" ng-click="menuClick($event)">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block {{m.icon}} fa-lg"></i></span>
+										<span class="text m-left-sm">{{m.title}}</span>
+										<span class="submenu-icon"></span>
+									</span>
+								</a>
+								<ul class="submenu bg-palette4">
+									<li ng-repeat="c in m.children">
+										<a href="#{{c.url}}">
+											<span class="submenu-label">
+												<i class="{{c.icon}}"></i>{{c.title}}
+											</span>
+										</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>	
+					<div class="sidebar-fix-bottom clearfix">
+						<div class="user-dropdown dropup pull-left">
+							<a href="#" class="dropdwon-toggle font-18" data-toggle="dropdown"><i class="ion-person-add"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="inbox.html">
+										Inbox
+										<span class="badge badge-danger bounceIn animation-delay2 pull-right">1</span>
+									</a>
+								</li>			  
+								<li>
+									<a href="#">
+										Notification
+										<span class="badge badge-purple bounceIn animation-delay3 pull-right">2</span>
+									</a>
+								</li>			  
+								<li>
+									<a href="#" class="sidebarRight-toggle">
+										Message
+										<span class="badge badge-success bounceIn animation-delay4 pull-right">7</span>
+									</a>
+								</li>			  	  
+								<li class="divider"></li>
+								<li>
+									<a href="#">Setting</a>
+								</li>			  	  
+							</ul>
+						</div>
+						<a href="lockscreen.html" class="pull-right font-18"><i class="ion-log-out"></i></a>
+					</div>
+				</div><!-- sidebar-inner -->
+			</aside>
+			<div class="main-container smart-widget">
+				<div class="smart-widget-header">
+					{{$state.current.data.title}}
+					<span class="smart-widget-option">
+						<span class="refresh-icon-animated">
+							<i class="fa fa-spinner fa-spin m-right-xs"></i>
+						</span>
+						<a href="#" class="widget-refresh-option">
+							<i class="fa fa-refresh"></i>
+						</a>
+					</span>
+				</div>
+				<div class="main-container-view" ui-view></div>
+			</div>
+
+			<footer class="footer">
+				<span class="footer-brand">
+					<strong class="text-danger">示例</strong> 系统
+				</span>
+				<p class="no-margin">
+					&copy; 2019 <strong>示例系统</strong>. ALL Rights Reserved.
+				</p>
+			</footer>
+		</div>
+
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+		
+	    <!-- Le javascript
+	    ================================================== -->
+	    <!-- Placed at the end of the document so the pages load faster -->
+
+
+		<!-- Jquery -->
+		<script src="assets/plugins/jquery/jquery.min.js"></script>
+
+		<!-- Bootstrap -->
+		<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+		<script src="assets/plugins/bootstrap/js/bootstrap-notify.js"></script>
+
+        <script src="assets/plugins/angularjs/angular.min.js"></script>
+        <script src="assets/plugins/angularjs/plugins/angular-ui-router.min.js"></script>
+		<script src="assets/plugins/angularjs/angular-sanitize.min.js"></script>
+        <script src="assets/plugins/angularjs/plugins/ocLazyLoad.min.js"></script>
+		<script src="assets/plugins/angularjs/plugins/pagination.js"></script>
+
+		<!-- Slimscroll -->
+		<script src='assets/plugins/jquery/jquery.slimscroll.min.js'></script>
+
+
+		<script src="assets/plugins/bootbox/bootbox.min.js"></script>
+		<script src="assets/plugins/w5cValidator/w5cValidator.js"></script>
+
+		<script src="assets/js/app/app.js"></script>
+		<script src="assets/js/app/filters.js"></script>
+		<script src="assets/js/app/message_zh.js"></script>
+
+		<!-- Simplify -->
+		<script src="assets/js/simplify/simplify.js"></script>
+
+		<script>
+            app.menuEvent = function($event){
+                if(!$('aside').hasClass('sidebar-mini') || Modernizr.mq('(max-width: 991px)'))	{
+                    if( $($event.currentTarget).parent().children('.submenu').is(':hidden') ) {
+                        $($event.currentTarget).parent().siblings().removeClass('open').children('.submenu').slideUp(200);
+                        $($event.currentTarget).parent().addClass('open').children('.submenu').slideDown(200);
+                    }
+                    else	{
+                        $($event.currentTarget).parent().removeClass('open').children('.submenu').slideUp(200);
+                    }
+                }
+                return false;
+            }
+		</script>
+	
+  	</body>
+</html>

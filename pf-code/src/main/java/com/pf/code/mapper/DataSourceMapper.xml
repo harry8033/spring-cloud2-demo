@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pf.code.dao.DataSourceDao" >
+	<resultMap id="BaseResultMap" type="com.pf.code.entity.DataSource">
+		<result column="id" property="id" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="uname" property="uname" jdbcType="VARCHAR"/>
+		<result column="upass" property="upass" jdbcType="VARCHAR"/>
+		<result column="dbtype" property="dbtype" jdbcType="VARCHAR"/>
+		<result column="driverclass" property="driverclass" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	t.id,t.name,t.url,t.uname,t.upass,t.dbtype,t.driverclass
+	</sql>
+	
+	<sql id="Example_Where_Clause" >
+		<trim prefix="where" prefixOverrides="and|or" >
+			<if test="id != null and id != ''" >
+	         	and t.id = #{id}
+			</if>
+			<if test="name != null and name != ''" >
+	         	and t.name = #{name}
+			</if>
+			<if test="url != null and url != ''" >
+	         	and t.url = #{url}
+			</if>
+			<if test="uname != null and uname != ''" >
+	         	and t.uname = #{uname}
+			</if>
+			<if test="upass != null and upass != ''" >
+	         	and t.upass = #{upass}
+			</if>
+			<if test="dbtype != null and dbtype != ''" >
+	         	and t.dbtype = #{dbtype}
+			</if>
+			<if test="driverclass != null and driverclass != ''" >
+	         	and t.driverclass = #{driverclass}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="findBy" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_datasource t 
+	    <include refid="Example_Where_Clause" />
+	    <include refid="common.Pagination_Tail" />
+	</select>
+	
+	<select id="findById" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_datasource t 
+	    where id=#{value}
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1)
+		from t_datasource t 
+	    <include refid="Example_Where_Clause" />
+	</select>
+	
+	<insert id="addEntity">
+		insert into t_datasource
+		(id,name,url,uname,upass,dbtype,driverclass) 
+		values
+		(#{id},#{name},#{url},#{uname},#{upass},#{dbtype},#{driverclass,jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="updateEntity">
+		update t_datasource  
+		<trim prefix="set" prefixOverrides="," >
+			<if test="name != null and name != ''" >
+	         	,name = #{name}
+			</if>
+			<if test="url != null and url != ''" >
+	         	,url = #{url}
+			</if>
+			<if test="uname != null and uname != ''" >
+	         	,uname = #{uname}
+			</if>
+			<if test="upass != null and upass != ''" >
+	         	,upass = #{upass}
+			</if>
+			<if test="dbtype != null and dbtype != ''" >
+	         	,dbtype = #{dbtype}
+			</if>
+			<if test="driverclass != null and driverclass != ''" >
+	         	,driverclass = #{driverclass}
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from t_datasource where id=#{value}
+	</delete>
+</mapper>
+

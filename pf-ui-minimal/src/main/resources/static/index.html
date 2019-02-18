@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <title>Minimal 1.3 - Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+
+    <link rel="icon" type="image/ico" href="assets/images/favicon.ico" />
+    <!-- Bootstrap -->
+    <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/plugins/fontawesome/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/minimal/minimal.css" rel="stylesheet">
+
+  </head>
+  <body class="bg-1" ng-controller="IndexController">
+
+    <!-- Preloader -->
+    <div class="mask"><div id="loader"></div></div>
+    <!--/Preloader -->
+
+    <!-- Wrap all page content here -->
+    <div id="wrap">
+
+      <!-- Make page fluid -->
+      <div class="row">
+
+
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-default navbar-fixed-top navbar-transparent-black mm-fixed-top collapsed" role="navigation" id="navbar">
+
+          <div class="navbar-header col-md-2">
+            <a class="navbar-brand" href="index.html">
+              <strong>MIN</strong>IMAL
+            </a>
+            <div class="sidebar-collapse">
+              <a style="cursor:pointer">
+                <i class="fa fa-bars"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- .nav-collapse -->
+          <div class="navbar-collapse">
+
+            <!-- Quick Actions -->
+            <ul class="nav navbar-nav quick-actions">
+
+              <li class="dropdown divided user" id="current-user">
+                <div class="profile-photo">
+                  <img src="assets/images/profile-photo.jpg" alt />
+                </div>
+                <a class="dropdown-toggle options" data-toggle="dropdown" href="index.html#">
+                  John Douey <i class="fa fa-caret-down"></i>
+                </a>
+
+                <ul class="dropdown-menu arrow settings">
+
+                  <li>
+
+                    <h3>Backgrounds:</h3>
+                    <ul id="color-schemes">
+                      <li><a href="index.html#" class="bg-1"></a></li>
+                      <li><a href="index.html#" class="bg-2"></a></li>
+                      <li><a href="index.html#" class="bg-3"></a></li>
+                      <li><a href="index.html#" class="bg-4"></a></li>
+                      <li><a href="index.html#" class="bg-5"></a></li>
+                      <li><a href="index.html#" class="bg-6"></a></li>
+                      <li class="title">Solid Backgrounds:</li>
+                      <li><a href="index.html#" class="solid-bg-1"></a></li>
+                      <li><a href="index.html#" class="solid-bg-2"></a></li>
+                      <li><a href="index.html#" class="solid-bg-3"></a></li>
+                      <li><a href="index.html#" class="solid-bg-4"></a></li>
+                      <li><a href="index.html#" class="solid-bg-5"></a></li>
+                      <li><a href="index.html#" class="solid-bg-6"></a></li>
+                    </ul>
+
+
+                  </li>
+
+                  <li class="divider"></li>
+
+                  <li>
+                    <a href="index.html#"><i class="fa fa-user"></i> Profile</a>
+                  </li>
+
+                  <li>
+                    <a href="index.html#"><i class="fa fa-calendar"></i> Calendar</a>
+                  </li>
+
+                  <li>
+                    <a href="index.html#"><i class="fa fa-envelope"></i> Inbox <span class="badge badge-red" id="user-inbox">3</span></a>
+                  </li>
+
+                  <li class="divider"></li>
+
+                  <li>
+                    <a href="index.html#"><i class="fa fa-power-off"></i> Logout</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <!-- Sidebar -->
+            <ul class="nav navbar-nav side-nav" id="sidebar">
+              
+              <li class="collapsed-content"> 
+                <ul>
+                  <li class="search"><!-- Collapsed search pasting here at 768px --></li>
+                </ul>
+              </li>
+
+              <li class="navigation" id="navigation">
+                <ul class="menu">
+                  
+                  <li class="active">
+                    <a href="index.html">
+                      <i class="fa fa-home"></i> 首页
+                    </a>
+                  </li>
+
+                  <li class="dropdown" ng-repeat="m in menus">
+                    <a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-list"></i> {{m.title}} <b class="fa fa-plus dropdown-plus"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li ng-repeat="c in m.children">
+                        <a href="#{{c.url}}">
+                          <i class="{{c.icon}}"></i> {{c.title}}
+                        </a>
+                      </li>
+                      <!--<li>
+                        <a href="validation-elements.html">
+                          <i class="fa fa-caret-right"></i> Validation
+                        </a>
+                      </li>
+                      <li>
+                        <a href="form-wizard.html">
+                          <i class="fa fa-caret-right"></i> Form Wizard
+                        </a>
+                      </li>-->
+                    </ul>
+                  </li>
+
+                </ul>
+
+              </li>
+              
+            </ul>
+            <!-- Sidebar end -->
+
+          </div>
+          <!--/.nav-collapse -->
+
+        </div>
+        <!-- Fixed navbar end -->
+
+        <!-- Page content -->
+        <div id="content" class="col-md-12" ui-view></div>
+        <!-- Page content end -->
+
+      </div>
+
+    </div>
+
+    <script src="assets/plugins/jquery/jquery.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap-notify.js"></script>
+
+    <script src="assets/plugins/angularjs/angular.min.js"></script>
+    <script src="assets/plugins/angularjs/plugins/angular-ui-router.min.js"></script>
+    <script src="assets/plugins/angularjs/angular-sanitize.min.js"></script>
+    <script src="assets/plugins/angularjs/plugins/ocLazyLoad.min.js"></script>
+    <script src="assets/plugins/angularjs/plugins/pagination.js"></script>
+    <script src="assets/plugins/w5cValidator/w5cValidator.js"></script>
+
+    <script src="assets/js/minimal/minimal.min.js"></script>
+    <script src="assets/js/app/app.js"></script>
+
+  </body>
+</html>
+      

@@ -1,0 +1,96 @@
+<div class="padding-xs" ng-controller="ManagerController">
+    <div class="btn-custom-group">
+        <button class="btn btn-info btn-sm" ng-click="addEntity()"><i class="fa fa-plus-circle"></i> 新增</button>
+    </div>
+    <table class="table table-actions table-striped">
+        <thead>
+        <tr class="bg-dark-blue">
+            <th width="200">帐号</th>
+            <th width="100">状态</th>
+            <th>角色</th>
+            <th width="150">创建时间</th>
+            <th width="170">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="v in page.rows">
+            <td>{{v.account}}</td>
+            <td>{{v.state | m_state}}</td>
+            <td>{{v.roleList | roles}}</td>
+            <td>{{v.createtimeString}}</td>
+            <td>
+                <button class="btn btn-xs btn-warning" ng-click="reset(v)"><i class="fa fa-key"></i>重置</button>
+                <button class="btn btn-xs btn-primary" ng-click="editEntity(v,$index)"><i class="fa fa-edit"></i>编辑</button>
+                <button class="btn btn-xs btn-danger" ng-click="delEntity(v,$index)"><i class="fa fa-trash-o"></i>删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination pagination-sm pull-right push-down-20 push-up-20">
+        <ul uib-pagination
+            total-items="page.total"
+            ng-model="currentPage"
+            items-per-page="page.size"
+            max-size="6"
+            class="pagination-sm"
+            boundary-link-numbers="true"
+            rotate="false"
+            ng-change="loadData()"/>
+    </div>
+    <form name="myForm" novalidate w5c-form-validate="entity">
+        <div class="modal animated fade" id="modal_edit" tabindex="-1"
+             role="dialog" aria-labelledby="smallModalHead" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                        </button>
+                        <h4 class="modal-title" id="smallModalHead">{{editForm.title}}</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="form-horizontal form-group-separated no-margin form-border">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">账号：</label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="account"
+                                           ng-model="entity.account" required ng-readonly="editForm.isEdit"/>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-if="!editForm.isEdit">
+                                <label class="col-md-2 control-label">密码：</label>
+                                <div class="col-md-10 line-height-30">
+                                    <span>初始密码为：000000</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">角色：</label>
+                                <div class="col-md-10">
+                                    <select class="form-control select2" id="roles" name="roles"
+                                            required style="width:420px"  multiple="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">状态：</label>
+                                <div class="col-md-10">
+                                    <label class="switch">
+                                        <input type="checkbox" ng-checked="entity.state == 1"
+                                               ng-model="entity.status" width="100">
+                                        <span>启用</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                w5c-form-submit="editForm.save($event)">保存</button>
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

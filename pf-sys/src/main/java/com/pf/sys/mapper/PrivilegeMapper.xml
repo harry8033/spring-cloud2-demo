@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moqu.manage.dao.PrivilegeDao" >
+	<resultMap id="BaseResultMap" type="com.moqu.manage.entity.Privilege">
+		<result column="id" property="id" jdbcType="VARCHAR"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="pid" property="pid" jdbcType="VARCHAR"/>
+		<result column="icon" property="icon" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap id="TreeResultMap" type="java.util.Map">
+		<result column="id" property="id" jdbcType="VARCHAR"/>
+		<result column="name" property="text" jdbcType="VARCHAR"/>
+		<result column="pid" property="parent" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select id, name, type, url, pid from t_privilege order by displayorder asc
+	</select>
+	
+	<select id="selectTree" resultMap="TreeResultMap">
+		select id, name, pid from t_privilege order by displayorder asc
+	</select>
+	
+	<select id="selectByRole" resultMap="TreeResultMap">
+		select p.id, p.name, p.pid from t_privilege p,t_role_privilege rp
+		where p.id=rp.privilegeid and roleid=#{value} order by displayorder asc
+	</select>
+	
+	<select id="getMenusByUser" resultMap="BaseResultMap">
+		select distinct p.id,p.name,p.url,p.pid,p.icon from t_manager_role a inner join t_role_privilege b
+		on a.roleid=b.roleid
+		inner join t_privilege_rela r on b.privilegeid=r.sid
+		inner join t_privilege p on r.pid=p.id
+		where managerid=#{value}
+		order by displayorder
+	</select>
+</mapper>
+

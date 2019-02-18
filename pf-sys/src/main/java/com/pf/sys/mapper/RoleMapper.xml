@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moqu.manage.dao.RoleDao" >
+	<resultMap id="BaseResultMap" type="com.moqu.manage.entity.Role">
+		<result column="id" property="id" jdbcType="VARCHAR"/>
+		<result column="rolename" property="rolename" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	t.id,t.rolename,t.createtime
+	</sql>
+	
+	<sql id="Example_Where_Clause" >
+		<trim prefix="where" prefixOverrides="and|or" >
+			<if test="id != null and id != ''" >
+	         	and t.id = #{id}
+			</if>
+			<if test="rolename != null and rolename != ''" >
+	         	and t.rolename = #{rolename}
+			</if>
+			<if test="createtime != null and createtime != ''" >
+	         	and t.createtime = #{createtime}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="findBy" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_role t 
+	    <include refid="Example_Where_Clause" />
+	    <include refid="common.Pagination_Tail" />
+	</select>
+	
+	<select id="findById" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_role t 
+	    where id=#{value}
+	</select>
+	
+	<select id="findByManagerId" resultMap="BaseResultMap">
+		select t.id,t.rolename
+		from t_role t,t_manager_role mr
+	    where t.id=mr.roleid and managerid=#{value}
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1)
+		from t_role t 
+	    <include refid="Example_Where_Clause" />
+	</select>
+	
+	<insert id="addEntity">
+		insert into t_role
+		(id,rolename) 
+		values
+		(#{id},#{rolename})
+	</insert>
+	
+	<update id="updateEntity">
+		update t_role  set rolename = #{rolename}
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from t_role_privilege where roleid=#{value};
+		delete from t_role where id=#{value};
+	</delete>
+	
+	<update id="updateUserRoleRela">
+		delete from t_manager_role where managerid=#{managerid};
+		insert into t_manager_role(managerid, roleid) values 
+		<foreach collection="list" item="item" open="" close=";" separator=",">
+			(#{item.managerid}, #{item.roleid})
+		</foreach>
+	</update>
+	
+	<update id="updateRolePrivRela">
+		delete from t_role_privilege where roleid=#{roleid};
+		<if test="list != null and list.size() != 0">
+			insert into t_role_privilege(privilegeid, roleid) values 
+			<foreach collection="list" item="item" open="" close=";" separator=",">
+				(#{item.privilegeid}, #{item.roleid})
+			</foreach>
+		</if>
+		
+	</update>
+	
+</mapper>
+

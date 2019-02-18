@@ -1,0 +1,107 @@
+<div class="padding-xs" ng-controller="TemplateController">
+    <div class="btn-custom-group">
+        <button class="btn btn-info btn-sm" ng-click="addEntity()"><i class="fa fa-plus-circle"></i> 新增</button>
+    </div>
+    <table class="table table-actions table-striped">
+        <thead>
+        <tr class="bg-dark-blue">
+            <th>模板名称</th>
+            <th>文件名</th>
+            <th>文件路径</th>
+            <th>压缩包内内容</th>
+            <th></th>
+            <th width="120">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="e in page.rows">
+            <td>{{e.name}}</td>
+            <td>{{e.filename}}</td>
+            <td>{{e.filepath}}</td>
+            <td>{{e.files}}</td>
+            <td>{{e.ctime}}</td>
+            <td>
+                <button class="btn btn-xs btn-primary" ng-click="editEntity(e,$index)"><i class="fa fa-edit"></i>编辑</button>
+                <button class="btn btn-xs btn-danger" ng-click="delEntity(e,$index)"><i class="fa fa-trash-o"></i>删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination pagination-sm pull-right push-down-20 push-up-20">
+        <ul uib-pagination
+            total-items="page.total"
+            ng-model="currentPage"
+            items-per-page="page.size"
+            max-size="6"
+            class="pagination-sm"
+            boundary-link-numbers="true"
+            rotate="false"
+            ng-change="loadData()"/>
+    </div>
+    <form name="myForm" novalidate w5c-form-validate="entity">
+        <div class="modal animated fade" id="modal_edit" tabindex="-1"
+             role="dialog" aria-labelledby="smallModalHead" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                        </button>
+                        <h4 class="modal-title" id="smallModalHead">{{editForm.title}}</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="form-horizontal form-group-separated no-margin form-border">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">模板名称：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="name"
+                                           ng-model="entity.name"
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">文件名：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="filename"
+                                           ng-model="entity.filename"
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">文件路径：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="filepath"
+                                           ng-model="entity.filepath"
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">压缩包内内容：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="files"
+                                           ng-model="entity.files"
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="ctime"
+                                           ng-model="entity.ctime"
+                                     >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                w5c-form-submit="editForm.save($event)">保存</button>
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
