@@ -1,5 +1,6 @@
 var app = angular.module("app", ["ui.router", "oc.lazyLoad", "ngSanitize", "ui.bootstrap.pagination", "w5c.validator"]);
 
+app.value('$env', {url: "http://localhost:8080/demo/"})
 
 app.config(['$controllerProvider', function ($controllerProvider) {
     // this option might be handy for migrating old apps, but please don't use
@@ -21,10 +22,11 @@ app.fetchMenu = function(menus, $stateProvider, parent){
     angular.forEach(menus, function (item) {
         $stateProvider.state(item.name, {
             url: item.url,
-            templateUrl: item.templateUrl,
+            templateUrl: item.turl,
             data: {
                 title: item.title,
-                parent: parent ? parent.title : ""
+                parent: parent ? parent.title : "",
+                icon: item.icon
             },
             controller: item.controller,
             resolve: {
@@ -35,7 +37,7 @@ app.fetchMenu = function(menus, $stateProvider, parent){
                             .load({
                                 name: 'app',
                                 insertBefore: '#ng_load_plugins_before', // load
-                                files: item.files
+                                files: item.fileList
                             });
                     }]
             }
@@ -67,13 +69,12 @@ app.config([
 ]).provider('$systemRouter', function ($stateProvider) {
     this.$get = function ($http, $state) {
         return {
-            setRouters : function($rootScope){
+            setRouters : function($rootScope, $env){
                 console.log("debug", "动态添加菜单")
-                //var menus = [];
-                //$rootScope.data
-                $http.get('assets/json/menu.json').success(function (data) {
-                    $rootScope.menus = data;
-                    angular.forEach(data, function (item) {
+
+                $http.get($env.url + 'sys/manager/getMenus').success(function (resp) {
+                    $rootScope.menus = resp.data;
+                    angular.forEach($rootScope.menus, function (item) {
                         if(item.children)
                             app.fetchMenu(item.children, $stateProvider, item)
                     });
@@ -99,8 +100,17 @@ app.config([
     this.$get = function ($http) {
         return {
             //GET请求
-            get: function (url, success) {
-                return $http.get(url).error(function (response) {
+            get: function (url, params, success) {
+                var callback = null;
+                var p = undefined;
+                if(typeof params === 'function'){
+                    callback = params;
+                }else{
+                    p = params;
+                    callback = success;
+                }
+                console.log('params', p)
+                return $http.get(url, p).error(function (response) {
                     danger(response);
                 }).success(function (resp) {
                     if (resp && resp.code) {
@@ -113,7 +123,7 @@ app.config([
                                 }
                             });
                         }else{
-                            success(resp);
+                            callback(resp);
                         }
                     }else {
                         danger(Message.RETURN_DATA_ERROR);
@@ -208,11 +218,14 @@ app.config([
             },
             clone: function (p) {
                 return JSON.parse(JSON.stringify(p));
+            },
+            getOffset: function ($scope) {
+                return ($scope.currentPage - 1) * $scope.pageSize
             }
         }
     }
-}).run(["$rootScope", "$state",'$systemRouter', function ($rootScope, $state, $systemRouter) {
+}).run(["$rootScope", "$state",'$systemRouter','$env', function ($rootScope, $state, $systemRouter, $env) {
     $rootScope.$state = $state; // state to be accessed from view
-    $systemRouter.setRouters($rootScope)
+    $systemRouter.setRouters($rootScope, $env)
     console.log("info", "app run")
-}]).value('$env', {url: "http://localhost:8080/demo/"});
+}]);

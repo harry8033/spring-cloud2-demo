@@ -1,0 +1,46 @@
+[
+  {
+    "title": "系统管理",
+    "icon": "fa fa-cogs",
+    "children": [
+      {
+        "name": "manager",
+        "url": "/manager",
+        "templateUrl": "views/manager.html",
+        "title": "管理员管理",
+        "subTitle": "",
+        "icon": "fa fa-address-card-o",
+        "controller": "ManagerController",
+        "files": [
+          "assets/plugins/select2/css/select2.min.css",
+          "assets/plugins/select2/js/select2.full.min.js",
+          "assets/js/app/controllers/ManagerController.js"
+        ]
+      },
+      {
+        "name": "role",
+        "url": "/role",
+        "templateUrl": "views/role.html",
+        "title": "角色管理",
+        "subTitle": "",
+        "icon":"fa fa-cog",
+        "controller": "RoleController",
+        "files": ["assets/js/app/controllers/RoleController.js"]
+      },
+      {
+        "name": "menu",
+        "url": "/menu",
+        "templateUrl": "views/privilege.html",
+        "title": "菜单管理",
+        "subTitle": "",
+        "icon":"fa fa-cubes",
+        "controller": "PrivilegeController",
+        "files": ["assets/js/app/controllers/PrivilegeController.js"]
+      }
+    ]
+  },
+  {
+    "title": "系统管理2",
+    "icon": "fa fa-list"
+  }
+]

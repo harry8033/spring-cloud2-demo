@@ -6,21 +6,43 @@
 
   <groupId>com.hr</groupId>
   <artifactId>spring-cloud2-demo</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <modules>
     <module>eureka-server</module>
     <module>spring-gateway</module>
     <module>ali-nacos-client</module>
+    <module>pf-core</module>
+    <module>pf-spring</module>
+    <module>pf-demo</module>
+    <module>pf-mybatis</module>
+    <module>pf-shiro</module>
+    <module>pf-swagger</module>
+    <module>pf-sys</module>
+    <module>pf-test</module>
+    <module>pf-test2</module>
+    <module>pf-cache</module>
+    <module>pf-ui-admin</module>
+    <module>pf-ui-base</module>
+    <module>pf-ui-simplify</module>
+    <module>pf-code</module>
+    <module>pf-sql-editor</module>
+    <module>pf-bigdata</module>
+    <module>pf-schedule</module>
+    <module>pf-ui-beyond</module>
+      <module>pf-plugin</module>
+      <module>pf-ui-minimal</module>
   </modules>
   <packaging>pom</packaging>
-
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
-
-  <parent>
+  <!--<parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.0.6.RELEASE</version>
+  </parent>-->
+
+  <parent>
+    <groupId>com.alipay.sofa</groupId>
+    <artifactId>sofaboot-dependencies</artifactId>
+    <version>3.1.1</version>
   </parent>
 
   <!--<parent>
@@ -38,41 +60,88 @@
       </dependency>
     </dependencies>
   </dependencyManagement>-->
-  <distributionManagement>
-    <site>
-      <id>website</id>
-      <url>scp://webhost.company.com/www/website</url>
-    </site>
-  </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <fastjson.version>1.2.28</fastjson.version>
+    <junit.version>4.12</junit.version>
+    <pf-version>1.0-SNAPSHOT</pf-version>
   </properties>
 
-  <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-      <plugins>
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.28</version>
+    </dependency>
+  </dependencies>
+    <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>com.hr</groupId>
+            <artifactId>pf-core</artifactId>
+            <version>1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>com.hr</groupId>
+            <artifactId>pf-spring</artifactId>
+            <version>1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>com.hr</groupId>
+            <artifactId>pf-shiro</artifactId>
+            <version>1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>com.hr</groupId>
+            <artifactId>pf-mybatis</artifactId>
+            <version>1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>com.hr</groupId>
+            <artifactId>pf-swagger</artifactId>
+            <version>1.0</version>
+          </dependency>
+          <dependency>
+              <groupId>com.hr</groupId>
+              <artifactId>pf-sys</artifactId>
+              <version>1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>com.hr</groupId>
+            <artifactId>pf-schedule</artifactId>
+            <version>1.0</version>
+          </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-  <reporting>
-    <plugins>
+  <build>
+    <!--<plugins>
       <plugin>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
       </plugin>
-    </plugins>
-  </reporting>
+    </plugins>-->
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.xml</include>
+          <include>**/*.html</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 </project>

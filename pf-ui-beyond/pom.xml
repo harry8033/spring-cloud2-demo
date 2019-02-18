@@ -8,9 +8,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pf-beyond</artifactId>
+    <artifactId>pf-ui-beyond</artifactId>
 
-    <name>pf-beyond</name>
+    <name>pf-ui-beyond</name>
 
     <dependencies>
         <dependency>

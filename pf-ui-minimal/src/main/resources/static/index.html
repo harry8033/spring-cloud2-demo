@@ -12,7 +12,7 @@
     <link href="assets/css/minimal/minimal.css" rel="stylesheet">
 
   </head>
-  <body class="bg-1" ng-controller="IndexController">
+  <body class="bg-5" ng-controller="IndexController">
 
     <!-- Preloader -->
     <div class="mask"><div id="loader"></div></div>
@@ -49,7 +49,7 @@
                 <div class="profile-photo">
                   <img src="assets/images/profile-photo.jpg" alt />
                 </div>
-                <a class="dropdown-toggle options" data-toggle="dropdown" href="index.html#">
+                <a class="dropdown-toggle options" data-toggle="dropdown" href="javascript:void(0);">
                   John Douey <i class="fa fa-caret-down"></i>
                 </a>
 
@@ -59,19 +59,19 @@
 
                     <h3>Backgrounds:</h3>
                     <ul id="color-schemes">
-                      <li><a href="index.html#" class="bg-1"></a></li>
-                      <li><a href="index.html#" class="bg-2"></a></li>
-                      <li><a href="index.html#" class="bg-3"></a></li>
-                      <li><a href="index.html#" class="bg-4"></a></li>
-                      <li><a href="index.html#" class="bg-5"></a></li>
-                      <li><a href="index.html#" class="bg-6"></a></li>
+                      <li><a href="javascript:void(0);" class="bg-1"></a></li>
+                      <li><a href="javascript:void(0);" class="bg-2"></a></li>
+                      <li><a href="javascript:void(0);" class="bg-3"></a></li>
+                      <li><a href="javascript:void(0);" class="bg-4"></a></li>
+                      <li><a href="javascript:void(0);" class="bg-5"></a></li>
+                      <li><a href="javascript:void(0);" class="bg-6"></a></li>
                       <li class="title">Solid Backgrounds:</li>
-                      <li><a href="index.html#" class="solid-bg-1"></a></li>
-                      <li><a href="index.html#" class="solid-bg-2"></a></li>
-                      <li><a href="index.html#" class="solid-bg-3"></a></li>
-                      <li><a href="index.html#" class="solid-bg-4"></a></li>
-                      <li><a href="index.html#" class="solid-bg-5"></a></li>
-                      <li><a href="index.html#" class="solid-bg-6"></a></li>
+                      <li><a href="javascript:void(0);" class="solid-bg-1"></a></li>
+                      <li><a href="javascript:void(0);" class="solid-bg-2"></a></li>
+                      <li><a href="javascript:void(0);" class="solid-bg-3"></a></li>
+                      <li><a href="javascript:void(0);" class="solid-bg-4"></a></li>
+                      <li><a href="javascript:void(0);" class="solid-bg-5"></a></li>
+                      <li><a href="javascript:void(0);" class="solid-bg-6"></a></li>
                     </ul>
 
 
@@ -80,21 +80,21 @@
                   <li class="divider"></li>
 
                   <li>
-                    <a href="index.html#"><i class="fa fa-user"></i> Profile</a>
+                    <a href="javascript:void(0);"><i class="fa fa-user"></i> Profile</a>
                   </li>
 
                   <li>
-                    <a href="index.html#"><i class="fa fa-calendar"></i> Calendar</a>
+                    <a href="javascript:void(0);"><i class="fa fa-calendar"></i> Calendar</a>
                   </li>
 
                   <li>
-                    <a href="index.html#"><i class="fa fa-envelope"></i> Inbox <span class="badge badge-red" id="user-inbox">3</span></a>
+                    <a href="javascript:void(0);"><i class="fa fa-envelope"></i> Inbox <span class="badge badge-red" id="user-inbox">3</span></a>
                   </li>
 
                   <li class="divider"></li>
 
                   <li>
-                    <a href="index.html#"><i class="fa fa-power-off"></i> Logout</a>
+                    <a href="javascript:void(0);"><i class="fa fa-power-off"></i> Logout</a>
                   </li>
                 </ul>
               </li>
@@ -118,7 +118,7 @@
                   </li>
 
                   <li class="dropdown" ng-repeat="m in menus">
-                    <a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
                       <i class="fa fa-list"></i> {{m.title}} <b class="fa fa-plus dropdown-plus"></b>
                     </a>
                     <ul class="dropdown-menu">
@@ -127,16 +127,6 @@
                           <i class="{{c.icon}}"></i> {{c.title}}
                         </a>
                       </li>
-                      <!--<li>
-                        <a href="validation-elements.html">
-                          <i class="fa fa-caret-right"></i> Validation
-                        </a>
-                      </li>
-                      <li>
-                        <a href="form-wizard.html">
-                          <i class="fa fa-caret-right"></i> Form Wizard
-                        </a>
-                      </li>-->
                     </ul>
                   </li>
 
@@ -154,7 +144,25 @@
         <!-- Fixed navbar end -->
 
         <!-- Page content -->
-        <div id="content" class="col-md-12" ui-view></div>
+        <div id="content" class="col-md-12">
+          <section class="tile color transparent-white">
+            <!-- tile header -->
+            <div class="tile-header">
+              <h3><i class="{{$state.current.data.icon}}"></i><strong>  {{$state.current.data.title}}</strong></h3>
+              <div class="controls">
+                <a href="javascript:;" class="refresh"><i class="fa fa-refresh"></i></a>
+              </div>
+            </div>
+            <!-- /tile header -->
+
+            <!-- tile body -->
+            <div class="tile-body" ui-view>
+
+            </div>
+            <!-- /tile body -->
+          </section>
+        </div>
+
         <!-- Page content end -->
 
       </div>
@@ -171,9 +179,12 @@
     <script src="assets/plugins/angularjs/plugins/ocLazyLoad.min.js"></script>
     <script src="assets/plugins/angularjs/plugins/pagination.js"></script>
     <script src="assets/plugins/w5cValidator/w5cValidator.js"></script>
+    <script src="assets/plugins/bootbox/bootbox.min.js"></script>
 
     <script src="assets/js/minimal/minimal.min.js"></script>
     <script src="assets/js/app/app.js"></script>
+    <script src="assets/js/app/filters.js"></script>
+    <script src="assets/js/app/message_zh.js"></script>
 
   </body>
 </html>
