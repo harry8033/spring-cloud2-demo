@@ -1,3 +1,4 @@
+
 spring:
   mvc:
     view:
@@ -7,3 +8,8 @@ spring:
     type: ehcache
     ehcache:
       config: classpath:/ehcache.xml
+server:
+  port: 8081
+#logging:
+#  level:
+#    org: debug

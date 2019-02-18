@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard</title>
+
+    <meta name="description" content="Dashboard" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+
+    <!--Basic Styles-->
+    <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/plugins/fontawesome/font-awesome.min.css" rel="stylesheet" />
+    <link href="assets/css/beyond/beyond.min.css" rel="stylesheet" type="text/css" />
+</head>
+    <!-- /Head -->
+    <!-- Body -->
+<body ng-controller="IndexController">
+    <!-- Loading Container -->
+    <div class="loading-container">
+        <div class="loader"></div>
+    </div>
+    <!--  /Loading Container -->
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="navbar-container">
+                <!-- Navbar Barnd -->
+                <div class="navbar-header pull-left">
+                    <a href="index.html#" class="navbar-brand">
+                        <small>
+                            <img src="assets/images/logo.png" alt="" />
+                        </small>
+                    </a>
+                </div>
+                <!-- /Navbar Barnd -->
+                <!-- Sidebar Collapse -->
+                <div class="sidebar-collapse" id="sidebar-collapse"> <i class="collapse-icon fa fa-bars"></i>
+                </div>
+                <!-- /Sidebar Collapse -->
+                <!-- Account Area and Settings --->
+                <div class="navbar-header pull-right">
+                    <div class="navbar-account">
+                        <ul class="account-area">
+
+                            <li>
+                                <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                                    <div class="avatar" title="View your public profile">
+                                        <img src="assets/images/av1.png"></div>
+                                    <section>
+                                        <h2>
+                                            <span class="profile">
+                                                <span>David Stevenson</span>
+                                            </span>
+                                        </h2>
+                                    </section>
+                                </a>
+                                <!--Login Area Dropdown-->
+                                <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
+                                    <li class="username">
+                                        <a>David Stevenson</a>
+                                    </li>
+                                    <li class="email">
+                                        <a>David.Stevenson@live.com</a>
+                                    </li>
+                                    <!--Avatar Area-->
+                                    <li>
+                                        <div class="avatar-area">
+                                            <img src="assets/images/av1.png" class="avatar">
+                                            <span class="caption">Change Photo</span>
+                                        </div>
+                                    </li>
+                                    <!--Avatar Area-->
+                                    <li class="edit">
+                                        <a href="profile.html" class="pull-left">Profile</a>
+                                        <a href="index.html#" class="pull-right">Setting</a>
+                                    </li>
+                                    <li class="dropdown-footer">
+                                        <a href="login.html">Sign out</a>
+                                    </li>
+                                </ul>
+                                <!--/Login Area Dropdown--> </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /Account Area and Settings --> </div>
+        </div>
+    </div>
+    <!-- /Navbar -->
+    <!-- Main Container -->
+    <div class="main-container container-fluid">
+        <!-- Page Container -->
+        <div class="page-container">
+            <!-- Page Sidebar -->
+            <div class="page-sidebar" id="sidebar">
+                <!-- Page Sidebar Header-->
+                <div class="sidebar-header-wrapper">
+                    <input type="text" class="searchinput" />
+                    <i class="searchicon fa fa-search"></i>
+                    <div class="searchhelper">Search Reports, Charts, Emails or Notifications</div>
+                </div>
+                <!-- /Page Sidebar Header -->
+                <!-- Sidebar Menu -->
+                <ul class="nav sidebar-menu">
+                    <!--Dashboard-->
+                    <li class="active">
+                        <a href="#/dashboard">
+                            <i class="menu-icon glyphicon glyphicon-home"></i>
+                            <span class="menu-text">首页</span>
+                        </a>
+                    </li>
+                    <li ng-repeat="m in menus">
+                        <a href="javascript:;" class="{{m.children == undefined ? '' : 'menu-dropdown'}}">
+                            <i class="menu-icon {{m.icon}}"></i>
+                            <span class="menu-text">{{m.title}}</span>
+                            <i class="fas fa-angle-right menu-expand" ng-if="m.children != undefined"></i>
+                        </a>
+
+                        <ul class="submenu">
+                            <li ng-repeat="c in m.children">
+                                <a href="#{{c.url}}">
+                                    <span class="menu-text"><i class="{{c.icon}}"></i> {{c.title}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <!--<div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="{{$state.current.data.parent_icon}}"></i>
+                            <a href="index.html#">{{$state.current.data.parent}}</a>
+                        </li>
+                        <li class="active">{{$state.current.data.title}}</li>
+                    </ul>
+                </div>-->
+                <div class="page-header position-relative">
+                    <div class="header-title">
+                        <i class="{{$state.current.data.icon}}"></i><h1>{{$state.current.data.title}}</h1>
+                    </div>
+
+                    <div class="header-buttons">
+                        <a class="sidebar-toggler" href="index.html#">
+                            <i class="fas fa-arrows-alt-h"></i>
+                        </a>
+                        <a class="refresh" id="refresh-toggler" href="index.html">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                        <a class="fullscreen" id="fullscreen-toggler" href="index.html#">
+                            <i class="glyphicon glyphicon-fullscreen"></i>
+                        </a>
+                    </div>
+                    </div>
+                <div class="page-body" ui-view>
+
+                </div>
+                </div>
+            </div>
+        </div>
+
+    <!--Basic Scripts-->
+    <script src="assets/plugins/jquery/jquery.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap-notify.js"></script>
+
+    <script src="assets/plugins/angularjs/angular.min.js"></script>
+    <script src="assets/plugins/angularjs/plugins/angular-ui-router.min.js"></script>
+    <script src="assets/plugins/angularjs/angular-sanitize.min.js"></script>
+    <script src="assets/plugins/angularjs/plugins/ocLazyLoad.min.js"></script>
+    <script src="assets/plugins/angularjs/plugins/pagination.js"></script>
+
+    <script src="assets/plugins/bootbox/bootbox.min.js"></script>
+    <script src="assets/plugins/w5cValidator/w5cValidator.js"></script>
+
+    <script src="assets/js/beyong/beyond.js"></script>
+    <script src="assets/js/app/app.js"></script>
+    <script src="assets/js/app/filters.js"></script>
+    <script src="assets/js/app/message_zh.js"></script>
+
+</body>
+</html>

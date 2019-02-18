@@ -11,13 +11,13 @@
 	    <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		
 		<!-- Font Awesome -->
-		<link href="assets/css/fontawesome/font-awesome.min.css" rel="stylesheet">
+		<link href="assets/plugins/fontawesome/font-awesome.css" rel="stylesheet">
 
 		<!-- Simplify -->
 		<link href="assets/css/simplify.css" rel="stylesheet">
 
 		<!-- bootbox style -->
-		<link href="assets/css/bootbox.css" rel="stylesheet">
+		<link href="assets/plugins/bootbox/bootbox.css" rel="stylesheet">
 	
   	</head>
 
@@ -181,7 +181,7 @@
 			</aside>
 			<div class="main-container smart-widget">
 				<div class="smart-widget-header">
-					{{$state.current.data.title}}
+					<i class="{{$state.current.data.icon}}"></i>  {{$state.current.data.title}}
 					<span class="smart-widget-option">
 						<span class="refresh-icon-animated">
 							<i class="fa fa-spinner fa-spin m-right-xs"></i>
@@ -226,7 +226,7 @@
 
 		<!-- Slimscroll -->
 		<script src='assets/plugins/jquery/jquery.slimscroll.min.js'></script>
-
+		<script src="assets/plugins/codemirror/codemirror.js"></script>
 
 		<script src="assets/plugins/bootbox/bootbox.min.js"></script>
 		<script src="assets/plugins/w5cValidator/w5cValidator.js"></script>

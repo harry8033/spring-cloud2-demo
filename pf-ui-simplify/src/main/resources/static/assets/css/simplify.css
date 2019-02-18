@@ -234,7 +234,7 @@ ul {
 }
 .pagination {
   #margin-bottom: 0;
-  margin: 15px 0;
+  margin: 0 0;
 }
 .pagination.pagination-xs > li > a,
 .pagination.pagination-xs > li > span {
@@ -778,7 +778,7 @@ a.list-group-item.active:focus {
   color: #fff;
 }
 .sidebar-menu .main-menu ul li.open > a .submenu-icon:before {
-  font-family: FontAwesome;
+  font-family: 'Font Awesome 5 Free';
   transform: rotate(90deg);
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
@@ -837,7 +837,7 @@ a.list-group-item.active:focus {
 .sidebar-menu .main-menu ul li a .submenu-icon:before {
   content: "\f105";
   display: inline-block;
-  font-family: FontAwesome;
+  font-family: 'Font Awesome 5 Free';
   transition: all 0.5s ease;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
@@ -3836,6 +3836,37 @@ table tbody td.text-right {
   -moz-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
+}
+.btn-pink,.btn-pink:focus,.btn-hover-pink:hover,.btn-hover-pink:active,.btn-hover-pink.active,.btn.btn-active-pink:active,.btn.btn-active-pink.active,.dropdown.open>.btn.btn-active-pink,.btn-group.open .dropdown-toggle.btn.btn-active-pink {
+  background-color: #df74a1;
+  border-color: #e17ca7;
+  color: #fff
+}
+
+.btn-pink:hover,.btn-pink:active,.btn-pink.active,.open>.dropdown-toggle.btn-pink {
+  background-color: #d9598f;
+  border-color: #da5f93;
+  color: #fff
+}
+.btn-dark,.btn-dark:focus,.btn-hover-dark:hover,.btn-hover-dark:active,.btn-hover-dark.active,.btn.btn-active-dark:active,.btn.btn-active-dark.active,.dropdown.open>.btn.btn-active-dark,.btn-group.open .dropdown-toggle.btn.btn-active-dark {
+  background-color: #363c40;
+  border-color: #3b4146;
+  color: #fff
+}
+.btn-dark:hover,.btn-dark:active,.btn-dark.active,.open>.dropdown-toggle.btn-dark {
+  background-color: #272b2e;
+  border-color: #2b2f33;
+  color: #fff
+}
+.btn-mint,.btn-mint:focus,.btn-hover-mint:hover,.btn-hover-mint:active,.btn-hover-mint.active,.btn.btn-active-mint:active,.btn.btn-active-mint.active,.dropdown.open>.btn.btn-active-mint,.btn-group.open .dropdown-toggle.btn.btn-active-mint {
+  background-color: #48c5a3;
+  border-color: #50c7a7;
+  color: #fff
+}
+.btn-mint:hover,.btn-mint:active,.btn-mint.active,.open>.dropdown-toggle.btn-mint {
+  background-color: #39b392;
+  border-color: #3bb897;
+  color: #fff
 }
 .open .dropdown-toggle.btn-primary {
   background: #2c6b9f;

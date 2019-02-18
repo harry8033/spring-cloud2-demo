@@ -5,6 +5,14 @@
 
     <diskStore path="user.home/base_ehcache"/>
 
+    <!-- p2p方式 -->
+
+    <cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+                                     properties="peerDiscovery=manual,rmiUrls=//127.0.0.1:40002/cache_user|//127.0.0.1:40003/cache_user"/>
+    <!--RMI监听40001端口-->
+    <cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+                                     properties="hostName=127.0.0.1,port=40001,socketTimeoutMillis=2000"/>
+
     <defaultCache
             maxElementsInMemory="20000"
             eternal="false"
@@ -22,6 +30,14 @@
            overflowToDisk="true"
            diskPersistent="false"
            timeToLiveSeconds="0"
-           diskExpiryThreadIntervalSeconds="120"/>
+           diskExpiryThreadIntervalSeconds="120">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+                properties="replicateAsynchronously=false, replicatePuts=true,
+                            replicatePutsViaCopy=true, replicateUpdates=true,
+                            replicateUpdatesViaCopy=true, replicateRemovals=true" />
+        <bootstrapCacheLoaderFactory
+                class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"/>
+    </cache>
 
 </ehcache>

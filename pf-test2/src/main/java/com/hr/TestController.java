@@ -15,15 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping("/index")
-    @Cacheable(sync = true)
+    @Cacheable(sync = true, key = "'index'")
     public String index(){
         //return "index2";
         return get();
     }
 
     public String get(){
-        System.out.println("============");
-        return "hello";
+        System.out.println("1111111");
+        return "leo";
+    }
+
+    @GetMapping("/test")
+    @Cacheable(sync = true, key = "'test'")
+    public String test(){
+        //return "index2";
+        return "hello test2";
     }
 
 }

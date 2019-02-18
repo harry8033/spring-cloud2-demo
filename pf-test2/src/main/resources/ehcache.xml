@@ -6,12 +6,11 @@
     <diskStore path="user.home/base_ehcache"/>
 
     <!-- p2p方式 -->
-
     <cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
-                                     properties="peerDiscovery=manual,rmiUrls=//127.0.0.1:40002/userCache|//127.0.0.1:40003/userCache"/>
-    <!--RMI监听40001端口-->
+                                     properties="peerDiscovery=manual,rmiUrls=//127.0.0.1:40001/cache_user|//127.0.0.1:40003/cache_user"/>
+    <!--RMI监听40002端口-->
     <cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-                                     properties="hostName=127.0.0.1,port=40001,socketTimeoutMillis=2000"/>
+                                     properties="hostName=127.0.0.1,port=40002,socketTimeoutMillis=2000"/>
 
     <defaultCache
             maxElementsInMemory="20000"

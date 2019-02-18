@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+  <meta charset="utf-8">
+  <title>示例系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="assets/skin/default_skin/css/theme.css">
+  <link rel="stylesheet" type="text/css" href="assets/plugins/fontawesome/font-awesome.min.css">
+  <link rel="shortcut icon" href="assets/img/favicon.ico">
+</head>
+
+<body class="dashboard-page sb-l-o sb-r-c" ng-controller="IndexController">
+  <div id="main">
+    <!-- Start: Header -->
+    <header class="navbar navbar-fixed-top">
+      <div class="navbar-branding">
+        <a class="navbar-brand" href="index.html">
+          <b>示例</b>系统
+        </a>
+        <span id="toggle_sidemenu_l" class="fa fa-bars"></span>
+      </div>
+      <!--<ul class="nav navbar-nav navbar-left">
+        <li class="hidden-xs">
+          <a class="request-fullscreen toggle-active" href="index.html#">
+            <span class="fa fa-desktop"></span>
+          </a>
+        </li>
+      </ul>-->
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="index.html#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="assets/img/avatars/1.jpg" alt="avatar" class="mw30 br64 mr15"> John.Smith
+            <span class="caret caret-tp hidden-xs"></span>
+          </a>
+          <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+            <li class="list-group-item">
+              <a href="index.html#" class="animated animated-short fadeInUp">
+                <span class="fa fa-envelope"></span> Messages
+                <span class="label label-warning">2</span>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="index.html#" class="animated animated-short fadeInUp">
+                <span class="fa fa-user"></span> Friends
+                <span class="label label-warning">6</span>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="index.html#" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> Account Settings </a>
+            </li>
+            <li class="list-group-item">
+              <a href="index.html#" class="animated animated-short fadeInUp">
+                <span class="fa fa-bell"></span> Activity  </a>
+            </li>
+            <li class="dropdown-footer">
+              <a href="index.html#" class="">
+              <span class="fa fa-power-off pr5"></span> Logout </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </header>
+    <!-- End: Header -->
+
+    <!-- Start: Sidebar Left -->
+    <aside id="sidebar_left" class="nano nano-primary sidebar-default affix">
+
+      <!-- Start: Sidebar Left Content -->
+      <div class="sidebar-left-content nano-content">
+
+        <!-- Start: Sidebar Left Menu -->
+        <ul class="nav sidebar-menu">
+          <li class="active">
+            <a href="#/dashboard">
+              <span class="fa fa-home"></span>
+              <span class="sidebar-title">首页</span>
+            </a>
+          </li>
+          <li ng-repeat="f in menus">
+            <a class="accordion-toggle" href="javascript:;" ng-click="menuClick($event)">
+              <span class="{{f.icon}}"></span>
+              <span class="sidebar-title">{{f.title}}</span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li ng-repeat="m in f.children">
+                <a class="accordion-toggle" href="#{{m.url}}">
+                  <span class="{{m.icon}}"></span>
+                  {{m.title}}
+                  <span class="caret" ng-if="m.children"></span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <!-- End: Sidebar Menu -->
+
+      </div>
+      <!-- End: Sidebar Left Content -->
+
+    </aside>
+    <!-- End: Sidebar Left -->
+
+    <!-- Start: Content-Wrapper -->
+    <section id="content_wrapper">
+      <!-- Start: Topbar -->
+      <header id="topbar" class="affix">
+        <div class="topbar-left">
+          <ol class="breadcrumb">
+            <!--<li class="crumb-active">
+              <a href="javascript:;">{{$state.current.data.title}}</a>
+            </li>-->
+            <li class="crumb-icon">
+              <a href="index.html">
+                <span class="fa fa-home"></span>
+              </a>
+            </li>
+            <li class="crumb-trail" ng-if="$state.current.data.parent">{{$state.current.data.parent}}</li>
+            <li class="crumb-trail">{{$state.current.data.title}}</li>
+          </ol>
+        </div>
+      </header>
+      <!-- End: Topbar -->
+
+      <!-- Begin: Content -->
+      <section id="content" ui-view style="background-color: #ffffff;padding-bottom: 80px">
+
+      </section>
+      <!-- End: Content -->
+
+      <!-- Begin: Page Footer -->
+      <!--<footer id="content-footer">
+        <div class="row">
+          <div class="col-md-6">
+            <span class="footer-legal">© 2019 示例系统</span>
+          </div>
+          <div class="col-md-6 text-right">
+            <a href="index.html#content" class="footer-return-top">
+              <span class="fa fa-arrow-up"></span>
+            </a>
+          </div>
+        </div>
+      </footer>-->
+      <!-- End: Page Footer -->
+
+    </section>
+    <!-- End: Content-Wrapper -->
+
+  </div>
+  <!-- End: Main -->
+
+  <!-- BEGIN: PAGE SCRIPTS -->
+
+  <!-- jQuery -->
+  <script src="assets/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+  <script src="assets/plugins/bootstrap/js/bootstrap-notify.js"></script>
+
+  <!-- Angular -->
+  <script src="assets/plugins/angularjs/angular.min.js"></script>
+  <script src="assets/plugins/angularjs/plugins/angular-ui-router.min.js"></script>
+  <script src="assets/plugins/angularjs/angular-sanitize.min.js"></script>
+  <script src="assets/plugins/angularjs/plugins/ocLazyLoad.min.js"></script>
+  <script src="assets/plugins/angularjs/plugins/pagination.js"></script>
+  <script src="assets/plugins/w5cValidator/w5cValidator.js"></script>
+
+  <!-- Theme Javascript -->
+  <script src="assets/js/utility/utility.js"></script>
+  <script src="assets/js/demo/demo.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/app/app.js"></script>
+  <script src="assets/js/app/filters.js"></script>
+  <script src="assets/js/app/message_zh.js"></script>
+
+  <script type="text/javascript">
+      $(function() {
+          "use strict";
+          // Init Theme Core
+          Core.init();
+          // Init Demo JS
+          Demo.init();
+      });
+
+      app.menuEvent = function($event){
+          $event.preventDefault()
+          if (!$($event.currentTarget).parents('ul.nav').length) {
+              if ($(window).width() > 900) {
+                  if ($('body.sb-top').length) { return; }
+              }
+
+              $('a.accordion-toggle.menu-open').next('ul').slideUp('fast', 'swing', function() {
+                  $(this).attr('style', '').prev().removeClass('menu-open');
+              });
+          }
+          else {
+              var activeMenu = $($event.currentTarget).next('ul.nav');
+              var siblingMenu = $($event.currentTarget).parent().siblings('li').children('a').next('ul.nav')
+
+              activeMenu.slideUp('fast', 'swing', function() {
+                  $(this).attr('style', '').prev().removeClass('menu-open');
+              });
+              siblingMenu.slideUp('fast', 'swing', function() {
+                  $(this).attr('style', '').prev().removeClass('menu-open');
+              });
+          }
+
+          if (!$($event.currentTarget).hasClass('menu-open')) {
+              $($event.currentTarget).next('ul').slideToggle('fast', 'swing', function() {
+                  $(this).attr('style', '').prev().toggleClass('menu-open');
+              });
+          }
+          return false;
+      }
+  </script>
+
+  <!-- END: PAGE SCRIPTS -->
+
+</body>
+</html>
