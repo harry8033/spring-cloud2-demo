@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pf.bigdata.dao.ColumnDao" >
+	<resultMap id="BaseResultMap" type="com.pf.bigdata.entity.Column">
+		<result column="id" property="id" jdbcType="INTEGER"/>
+		<result column="table_id" property="tableId" jdbcType="VARCHAR"/>
+		<result column="col_name" property="colName" jdbcType="VARCHAR"/>
+		<result column="col_remarks" property="colRemarks" jdbcType="VARCHAR"/>
+		<result column="col_type" property="colType" jdbcType="VARCHAR"/>
+		<result column="col_def" property="colDef" jdbcType="VARCHAR"/>
+		<result column="isnull" property="isnull" jdbcType="INTEGER"/>
+		<result column="ispk" property="ispk" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	t.id,t.table_id,t.col_name,t.col_remarks,t.col_type,t.col_def,t.isnull,t.ispk,t.ctime
+	</sql>
+	
+	<sql id="Example_Where_Clause" >
+		<trim prefix="where" prefixOverrides="and|or" >
+			<if test="id != null and id != ''" >
+	         	and t.id = #{id}
+			</if>
+			<if test="tableId != null and tableId != ''" >
+	         	and t.table_id = #{tableId}
+			</if>
+			<if test="colName != null and colName != ''" >
+	         	and t.col_name = #{colName}
+			</if>
+			<if test="colRemarks != null and colRemarks != ''" >
+	         	and t.col_remarks = #{colRemarks}
+			</if>
+			<if test="colType != null and colType != ''" >
+	         	and t.col_type = #{colType}
+			</if>
+			<if test="colDef != null and colDef != ''" >
+	         	and t.col_def = #{colDef}
+			</if>
+			<if test="isnull != null and isnull != ''" >
+	         	and t.isnull = #{isnull}
+			</if>
+			<if test="ispk != null and ispk != ''" >
+	         	and t.ispk = #{ispk}
+			</if>
+			<if test="ctime != null and ctime != ''" >
+	         	and t.ctime = #{ctime}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="findBy" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_list_column t 
+	    <include refid="Example_Where_Clause" />
+	</select>
+	
+	<select id="findById" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from t_list_column t 
+	    where id=#{value}
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1)
+		from t_list_column t 
+	    <include refid="Example_Where_Clause" />
+	</select>
+	
+	<insert id="addEntity">
+		insert into t_list_column
+		(table_id,col_name,col_remarks,col_type,col_def,isnull,ispk)
+		values
+		<foreach collection="list" item="c" separator="," close=";">
+			(#{c.tableId},#{c.colName},#{c.colRemarks,jdbcType=VARCHAR},#{c.colType},#{c.colDef,jdbcType=VARCHAR},#{c.isnull},#{c.ispk})
+		</foreach>
+	</insert>
+
+	<insert id="addEntityWithId">
+		insert into t_list_column
+		(id,table_id,col_name,col_remarks,col_type,col_def,isnull,ispk)
+		values
+		<foreach collection="list" item="c" separator="," close=";">
+			(#{c.id},#{c.tableId},#{c.colName},#{c.colRemarks,jdbcType=VARCHAR},#{c.colType},#{c.colDef,jdbcType=VARCHAR},#{c.isnull},#{c.ispk})
+		</foreach>
+	</insert>
+	
+	<update id="updateEntity">
+		update t_list_column  
+		<trim prefix="set" prefixOverrides="," >
+			<if test="tableId != null and tableId != ''" >
+	         	,table_id = #{tableId}
+			</if>
+			<if test="colName != null and colName != ''" >
+	         	,col_name = #{colName}
+			</if>
+			<if test="colRemarks != null and colRemarks != ''" >
+	         	,col_remarks = #{colRemarks}
+			</if>
+			<if test="colType != null and colType != ''" >
+	         	,col_type = #{colType}
+			</if>
+			<if test="colDef != null and colDef != ''" >
+	         	,col_def = #{colDef}
+			</if>
+			<if test="isnull != null and isnull != ''" >
+	         	,isnull = #{isnull}
+			</if>
+			<if test="ispk != null and ispk != ''" >
+	         	,ispk = #{ispk}
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from t_list_column where id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<delete id="deleteByTable">
+		delete from t_list_column where table_id=#{value}
+	</delete>
+</mapper>
+

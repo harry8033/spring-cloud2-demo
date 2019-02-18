@@ -1,0 +1,222 @@
+<div class="padding-xs" ng-controller="TablesController">
+    <div class="btn-custom-group">
+        <button class="btn btn-info btn-sm" ng-click="addEntity()"><i class="fa fa-plus-circle"></i> 新增</button>
+        <button class="btn btn-primary btn-sm" ng-click="showSource()"><i class="fas fa-cloud-download-alt "></i> 源导入</button>
+    </div>
+    <table class="table table-actions table-striped">
+        <thead>
+        <tr class="bg-dark-blue">
+            <!--<th width="40"></th>-->
+            <th width="240">表名</th>
+            <th>表描述</th>
+            <th width="80">列数量</th>
+            <th width="180">创建时间</th>
+            <th width="120">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="e in page.list">
+            <!--<td><mydire table-data="e"/></td>-->
+            <td>{{e.tableName}}</td>
+            <td>{{e.tableComm}}</td>
+            <td>{{e.colSize}}</td>
+            <td>{{e.ctime}}</td>
+            <td>
+                <button class="btn btn-xs btn-primary" ng-click="editEntity(e,$index)"><i class="fa fa-edit"></i>编辑</button>
+                <button class="btn btn-xs btn-danger" ng-click="delEntity(e,$index)"><i class="fa fa-trash-o"></i>删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination pagination-sm pull-right push-down-20 push-up-20">
+        <ul uib-pagination
+            total-items="page.total"
+            ng-model="currentPage"
+            items-per-page="page.pageSize"
+            max-size="6"
+            class="pagination-sm"
+            boundary-link-numbers="true"
+            rotate="false"
+            ng-change="loadData()"/>
+    </div>
+    <form name="myForm" novalidate w5c-form-validate="entity">
+        <div class="modal animated fade" id="modal_edit" tabindex="-1"
+             role="dialog" aria-labelledby="smallModalHead" aria-hidden="true">
+            <div class="modal-dialog" style="width: 800px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                        </button>
+                        <h4 class="modal-title">{{editForm.title}}</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="form-horizontal form-group-separated no-margin form-border">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">表名：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="tableName"
+                                           ng-model="entity.tableName"
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">表描述：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="tableComm"
+                                           ng-model="entity.tableComm"
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!--<div class="btn-custom-group">
+                                    <button class="btn btn-info btn-sm" ng-click="addEntity()"><i class="fa fa-plus-circle"></i> 新增</button>
+                                </div>-->
+                                <table class="table table-actions table-striped">
+                                    <thead>
+                                    <tr class="">
+                                        <th width="150">名称</th>
+                                        <th width="150">数据类型</th>
+                                        <th>描述</th>
+                                        <th width="50">主键</th>
+                                        <th width="50">可空</th>
+                                        <th width="120">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="c in entity.columns">
+                                            <td ng-if="!c.isEdit">{{c.colName}}</td>
+                                            <td ng-if="!c.isEdit">{{c.colType}}</td>
+                                            <td ng-if="!c.isEdit">{{c.colRemarks}}</td>
+                                            <td ng-if="!c.isEdit">{{c.ispk | bl_type}}</td>
+                                            <td ng-if="!c.isEdit">{{c.isnull | bl_type}}</td>
+                                            <td ng-if="!c.isEdit">
+                                                <button class="btn btn-xs btn-primary" ng-click="editColumn(c,$index)"><i class="fa fa-edit"></i>编辑</button>
+                                                <button class="btn btn-xs btn-danger" ng-click="delColumn($index)"><i class="fa fa-trash-o"></i>删除</button>
+                                            </td>
+                                            <td ng-if="c.isEdit"><input type="text" class="form-control" ng-model="c.colName"></td>
+                                            <td ng-if="c.isEdit"><input type="text" class="form-control" ng-model="c.colType"></td>
+                                            <td ng-if="c.isEdit"><input type="text" class="form-control" ng-model="c.colRemarks"></td>
+                                            <td ng-if="c.isEdit">
+                                                <div class="custom-checkbox" style="margin-top: 7px">
+                                                    <input type="checkbox" id="pkChb-{{c.colName}}" class="checkbox-red" ng-model="c.ispk_bl">
+                                                    <label for="pkChb-{{c.colName}}"></label>
+                                                </div>
+                                            </td>
+                                            <td ng-if="c.isEdit">
+                                                <div class="custom-checkbox" style="margin-top: 7px">
+                                                    <input type="checkbox" id="nullChb-{{c.colName}}" class="checkbox-purple" ng-model="c.isnull_bl">
+                                                    <label for="nullChb-{{c.colName}}"></label>
+                                                </div>
+                                            </td>
+                                            <td ng-if="c.isEdit" style="padding-top: 12px">
+                                                <button class="btn btn-xs btn-success" ng-click="saveColumn(c)"><i class="far fa-check-circle"></i>保存</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" class="form-control" ng-model="column.colName"></td>
+                                            <td><input type="text" class="form-control" ng-model="column.colType"></td>
+                                            <td><input type="text" class="form-control" ng-model="column.colRemarks"></td>
+                                            <td>
+                                                <div class="custom-checkbox" style="margin-top: 7px">
+                                                    <input type="checkbox" id="pkChb" class="checkbox-red" ng-model="column.ispk_bl">
+                                                    <label for="pkChb"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-checkbox" style="margin-top: 7px">
+                                                    <input type="checkbox" id="nullChb" class="checkbox-purple" ng-model="column.isnull_bl">
+                                                    <label for="nullChb"></label>
+                                                </div>
+                                            </td>
+                                            <td style="padding-top: 12px">
+                                                <button class="btn btn-xs btn-info" ng-click="addColumn()"><i class="far fa-check-circle"></i>添加</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--<div class="form-group">
+                                <label class="col-md-2 control-label">列数量：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="colSize"
+                                           ng-model="entity.colSize"
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">创建语句：</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="ddlSql"
+                                           ng-model="entity.ddlSql"
+                                     >
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                w5c-form-submit="editForm.save($event)">保存</button>
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form name="sourceForm">
+        <div class="modal animated fade" id="modal_source" tabindex="-1"
+             role="dialog" aria-labelledby="smallModalHead" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                        </button>
+                        <h4 class="modal-title">数据源导入表信息</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="btn-custom-group">
+                            <div class="btn-group">
+                                <a class="btn btn-default shiny " href="javascript:void(0);">{{dropTitle}}</a>
+                                <a class="btn btn-default  dropdown-toggle shiny" data-toggle="dropdown" href="javascript:void(0);"><i class="fa fa-angle-down"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="ds in dataSources">
+                                        <a href="javascript:void(0);" ng-click="changeDataSource(ds)">{{ds.name}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <table class="table table-actions table-striped">
+                            <thead>
+                            <tr class="bg-dark-blue">
+                                <th width="50">序号</th>
+                                <th width="150">表名</th>
+                                <th>表描述</th>
+                                <th width="80">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="t in tables">
+                                <td>{{$index + 1}}</td>
+                                <td>{{t.sqlName}}</td>
+                                <td>{{t.remarks}}</td>
+                                <td>
+                                    <button class="btn btn-xs btn-primary" ng-click="importTable(t,$index)"><i class="fas fa-sign-in-alt"></i>导入</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                ng-click="editForm.save($event)">全部导入</button>
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
